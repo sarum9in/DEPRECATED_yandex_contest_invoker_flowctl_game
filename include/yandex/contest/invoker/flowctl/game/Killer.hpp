@@ -5,6 +5,8 @@
 #include <string>
 #include <unordered_set>
 
+#include <boost/serialization/access.hpp>
+#include <boost/serialization/nvp.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/format.hpp>
 
@@ -24,6 +26,13 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 
         struct Options
         {
+            template <typename Archive>
+            void serialize(Archive &ar, const unsigned int)
+            {
+                ar & BOOST_SERIALIZATION_NVP(protect);
+                ar & BOOST_SERIALIZATION_NVP(pattern);
+            }
+
             /*!
              * \brief Do not operate on these processes.
              *
@@ -32,7 +41,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             std::unordered_set<Id> protect;
 
             /// The was of translation ids into cgroup names.
-            boost::format pattern{"id_%1%"};
+            std::string pattern = "id_%1%";
         };
 
     public:
