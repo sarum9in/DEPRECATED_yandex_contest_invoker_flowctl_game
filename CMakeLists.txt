@@ -26,6 +26,7 @@ include_directories(include)
 
 add_library(${PROJECT_NAME} SHARED
     src/lib/Killer.cpp
+    src/lib/KillerInterface.cpp
 )
 target_link_libraries(${PROJECT_NAME} ${libraries})
 
