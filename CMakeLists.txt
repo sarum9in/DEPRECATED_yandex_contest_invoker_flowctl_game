@@ -25,7 +25,7 @@ include_directories(include)
 # Targets
 
 add_library(${PROJECT_NAME} SHARED
-    src/lib/empty.cpp
+    src/lib/Killer.cpp
 )
 target_link_libraries(${PROJECT_NAME} ${libraries})
 
