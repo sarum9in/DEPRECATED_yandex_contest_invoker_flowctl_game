@@ -42,6 +42,7 @@ add_library(${PROJECT_NAME} SHARED
     src/lib/BrokerTextInterface.cpp
 
     src/lib/Tokenizer.cpp
+    src/lib/SharedTokenizer.cpp
 )
 target_link_libraries(${PROJECT_NAME} ${libraries})
 
