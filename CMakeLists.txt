@@ -38,6 +38,7 @@ add_library(${PROJECT_NAME} SHARED
     src/lib/KillerStreamInterface.cpp
 
     src/lib/Broker.cpp
+    src/lib/BrokerInterface.cpp
 )
 target_link_libraries(${PROJECT_NAME} ${libraries})
 

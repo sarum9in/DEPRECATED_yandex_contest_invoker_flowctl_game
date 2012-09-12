@@ -23,6 +23,13 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 
         struct ResourceLimits
         {
+            ResourceLimits()=default;
+
+            ResourceLimits(const std::uint64_t timeLimitMillis_,
+                           const std::uint64_t realTimeLimitMillis_):
+                timeLimitMillis(timeLimitMillis_),
+                realTimeLimitMillis(realTimeLimitMillis_) {}
+
             std::uint64_t timeLimitMillis = std::numeric_limits<std::uint64_t>::max();
             std::uint64_t realTimeLimitMillis = std::numeric_limits<std::uint64_t>::max();
         };
