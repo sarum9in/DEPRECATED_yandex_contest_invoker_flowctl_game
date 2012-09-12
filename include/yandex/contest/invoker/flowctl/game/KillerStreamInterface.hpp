@@ -7,12 +7,14 @@
 namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace game
 {
     /*!
-     * \brief Binary interface using std::cin/std::cout.
+     * \brief Binary interface using iostreams.
+     *
+     * \note Stores references to given iostreams.
      */
-    class KillerSTDInterface: public KillerInterface
+    class KillerStreamInterface: public KillerInterface
     {
     public:
-        KillerSTDInterface()=default;
+        KillerStreamInterface(std::istream &input, std::ostream &output);
 
     protected:
         virtual void send(const Command &command) override;
@@ -20,5 +22,9 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 
         virtual Command recvCommand() override;
         virtual Status recvStatus() override;
+
+    private:
+        std::istream &input_;
+        std::ostream &output_;
     };
 }}}}}

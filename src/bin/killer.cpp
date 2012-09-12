@@ -1,4 +1,5 @@
-#include "yandex/contest/invoker/flowctl/game/KillerSTDInterface.hpp"
+#include "yandex/contest/invoker/flowctl/game/KillerImpl.hpp"
+#include "yandex/contest/invoker/flowctl/game/KillerStreamInterface.hpp"
 
 #include "yandex/contest/config/InputArchive.hpp"
 
@@ -9,11 +10,11 @@
 namespace config = yandex::contest::config;
 using namespace yandex::contest::invoker::flowctl::game;
 
-Killer::Options readOptions(const boost::filesystem::path &path)
+KillerImpl::Options readOptions(const boost::filesystem::path &path)
 {
     boost::property_tree::ptree ptree;
     boost::property_tree::read_json(path.c_str(), ptree);
-    Killer::Options options;
+    KillerImpl::Options options;
     config::InputArchive<boost::property_tree::ptree>::loadFromPtree(options, ptree);
     return options;
 }
@@ -21,8 +22,8 @@ Killer::Options readOptions(const boost::filesystem::path &path)
 int main(int argc, char *argv[])
 {
     BOOST_ASSERT(argc == 1 + 1);
-    Killer killer(readOptions(argv[1]));
-    KillerSTDInterface iface;
+    KillerImpl killer(readOptions(argv[1]));
+    KillerStreamInterface iface(std::cin, std::cout);
     try
     {
         for (;;)

@@ -3,36 +3,32 @@
 #include "yandex/contest/invoker/flowctl/game/Killer.hpp"
 #include "yandex/contest/invoker/flowctl/game/Error.hpp"
 
+#include "yandex/contest/StreamEnum.hpp"
+
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/noncopyable.hpp>
 
 namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace game
 {
-    class KillerInterface: private boost::noncopyable
+    class KillerInterface: public Killer
     {
     public:
-        typedef Killer::Id Id;
-        typedef Killer::Status Status;
+        virtual Status freeze(const Id &id) override;
+        virtual Status unfreeze(const Id &id) override;
+        virtual Status terminate(const Id &id) override;
 
-    public:
-        Status freeze(const Id &id);
-        Status unfreeze(const Id &id);
-        Status terminate(const Id &id);
-
-        void runOnce(const Killer &killer);
-
-        virtual ~KillerInterface();
+        void runOnce(Killer &killer);
 
     protected:
         struct Command
         {
-            enum Type
-            {
+            YANDEX_CONTEST_INCLASS_STREAM_ENUM(Type,
+            (
                 FREEZE,
                 UNFREEZE,
                 TERMINATE
-            };
+            ))
 
             template <typename Archive>
             void serialize(Archive &ar, const unsigned int)
@@ -53,6 +49,6 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         virtual Status recvStatus()=0;
 
     private:
-        static Status run(const Killer &killer, const Command &command);
+        static Status run(Killer &killer, const Command &command);
     };
 }}}}}

@@ -1,14 +1,8 @@
 #pragma once
 
-#include "yandex/contest/system/cgroup/ControlGroup.hpp"
-
 #include <string>
-#include <unordered_set>
 
-#include <boost/serialization/access.hpp>
-#include <boost/serialization/nvp.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/format.hpp>
 
 namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace game
 {
@@ -24,39 +18,11 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             PROTECTED
         };
 
-        struct Options
-        {
-            template <typename Archive>
-            void serialize(Archive &ar, const unsigned int)
-            {
-                ar & BOOST_SERIALIZATION_NVP(protect);
-                ar & BOOST_SERIALIZATION_NVP(pattern);
-            }
-
-            /*!
-             * \brief Do not operate on these processes.
-             *
-             * \note Killer's process is always protected.
-             */
-            std::unordered_set<Id> protect;
-
-            /// The was of translation ids into cgroup names.
-            std::string pattern = "id_%1%";
-        };
-
     public:
-        explicit Killer(const Options &options);
+        virtual Status freeze(const Id &id)=0;
+        virtual Status unfreeze(const Id &id)=0;
+        virtual Status terminate(const Id &id)=0;
 
-        Status freeze(const Id &id) const;
-        Status unfreeze(const Id &id) const;
-        Status terminate(const Id &id) const;
-
-    private:
-        ControlGroupId rawIdToCgroup(const Id &id) const;
-
-    private:
-        system::cgroup::ControlGroup thisControlGroup_, parentControlGroup_;
-        std::unordered_set<ControlGroupId> protect_;
-        boost::format pattern_;
+        virtual ~Killer();
     };
 }}}}}

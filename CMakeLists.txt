@@ -13,6 +13,13 @@ find_package(Boost COMPONENTS system filesystem serialization unit_test_framewor
 include_directories(${Boost_INCLUDE_DIRS})
 list(APPEND libraries ${Boost_LIBRARIES})
 
+# LibEvent
+#find_package(PkgConfig)
+#pkg_check_modules(REQUIRED libevent)
+#link_directories(${LibEvent_LIBRARY_DIRS})
+#include_directories(${LibEvent_INCLUDE_DIRS})
+#list(APPEND libraries ${LibEvent_LIBRARIES})
+
 # yandex_contest_*
 list(APPEND libraries
     yandex_contest_common
@@ -26,8 +33,9 @@ include_directories(include)
 
 add_library(${PROJECT_NAME} SHARED
     src/lib/Killer.cpp
+    src/lib/KillerImpl.cpp
     src/lib/KillerInterface.cpp
-    src/lib/KillerSTDInterface.cpp
+    src/lib/KillerStreamInterface.cpp
 )
 target_link_libraries(${PROJECT_NAME} ${libraries})
 

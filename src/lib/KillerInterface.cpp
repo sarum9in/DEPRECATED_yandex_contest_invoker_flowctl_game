@@ -20,14 +20,12 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         return recvStatus();
     }
 
-    void KillerInterface::runOnce(const Killer &killer)
+    void KillerInterface::runOnce(Killer &killer)
     {
         send(run(killer, recvCommand()));
     }
 
-    KillerInterface::~KillerInterface() {}
-
-    KillerInterface::Status KillerInterface::run(const Killer &killer, const Command &command)
+    KillerInterface::Status KillerInterface::run(Killer &killer, const Command &command)
     {
         switch (command.type)
         {
@@ -38,5 +36,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         case Command::TERMINATE:
             return killer.terminate(command.id);
         }
+        BOOST_ASSERT(false);
+        return Status::OK;
     }
 }}}}}
