@@ -50,12 +50,14 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                 ar & BOOST_SERIALIZATION_NVP(args);
             }
 
+            Command()=default;
+
             template <typename ... Args>
             Command(const Type type_, const SolutionId id_, Args &&...args):
                 type(type_), id(id_), args{boost::lexical_cast<std::string>(args)...} {}
 
-            Type type;
-            SolutionId id;
+            Type type = TERMINATE;
+            SolutionId id = std::numeric_limits<SolutionId>::max();
             std::vector<std::string> args;
         };
 
