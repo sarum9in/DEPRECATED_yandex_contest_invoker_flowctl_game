@@ -31,7 +31,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 
         void runOnce(Broker &broker);
 
-    private:
+    protected:
         struct Command
         {
             YANDEX_CONTEST_INCLASS_STREAM_ENUM(Type,
@@ -47,6 +47,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             {
                 ar & BOOST_SERIALIZATION_NVP(type);
                 ar & BOOST_SERIALIZATION_NVP(id);
+                ar & BOOST_SERIALIZATION_NVP(args);
             }
 
             template <typename ... Args>

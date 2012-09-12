@@ -21,7 +21,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 
     void BrokerInterface::send(const SolutionId id, const std::string &msg)
     {
-        send(Command(Command::SEND, id));
+        send(Command(Command::SEND, id, msg));
     }
 
     BrokerInterface::Result BrokerInterface::end(const SolutionId id, const bool discardRemaining)
