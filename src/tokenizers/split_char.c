@@ -8,7 +8,7 @@ typedef struct
     char sep;
 } tokenizer;
 
-void *tokenizer_new_tokenizer(const char *line, size_t size)
+void *tokenizer_new(const char *line, size_t size)
 {
     assert(line);
     assert(size == 1);
@@ -19,7 +19,7 @@ void *tokenizer_new_tokenizer(const char *line, size_t size)
     return tok;
 }
 
-void tokenizer_delete_tokenizer(void *tok)
+void tokenizer_delete(void *tok)
 {
     assert(tok);
     free(tok);

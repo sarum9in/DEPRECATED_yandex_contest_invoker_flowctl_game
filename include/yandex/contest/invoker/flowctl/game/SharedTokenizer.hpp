@@ -53,8 +53,8 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
          */
         typedef const char *(*whatFunction)(void *);
 
-        static constexpr const char *newTokenizerName = "tokenizer_new_tokenizer";
-        static constexpr const char *deleteTokenizerName = "tokenizer_delete_tokenizer";
+        static constexpr const char *newTokenizerName = "tokenizer_new";
+        static constexpr const char *deleteTokenizerName = "tokenizer_delete";
         static constexpr const char *parseName = "tokenizer_parse";
         static constexpr const char *whatName = "tokenizer_what";
 
