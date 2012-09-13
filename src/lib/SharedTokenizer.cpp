@@ -14,12 +14,13 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                  const deleteTokenizerFunction deleteTokenizer,
                  const parseFunction parse,
                  const whatFunction what,
-                 const char *const argument):
+                 const char *const argument,
+                 const std::size_t size):
             newTokenizer_(newTokenizer),
             deleteTokenizer_(deleteTokenizer),
             parse_(parse),
             what_(what),
-            instance_(newTokenizer_(argument))
+            instance_(newTokenizer_(argument, size))
         {
             if (!instance_)
                 throw std::bad_alloc();
@@ -59,10 +60,10 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
     };
 
     SharedTokenizerFactory::SharedTokenizerFactory(system::unistd::DynamicLibrary &dl):
-        newTokenizer_(reinterpret_cast<newTokenizerFunction>(dl.symbol(newTokenizerName))),
-        deleteTokenizer_(reinterpret_cast<deleteTokenizerFunction>(dl.symbol(deleteTokenizerName))),
-        parse_(reinterpret_cast<parseFunction>(dl.symbol(parseName))),
-        what_(reinterpret_cast<whatFunction>(dl.symbol(whatName)))
+        newTokenizer_(dl.symbol<newTokenizerFunction>(newTokenizerName)),
+        deleteTokenizer_(dl.symbol<deleteTokenizerFunction>(deleteTokenizerName)),
+        parse_(dl.symbol<parseFunction>(parseName)),
+        what_(dl.symbol<whatFunction>(whatName))
     {
         BOOST_ASSERT(newTokenizer_);
         BOOST_ASSERT(deleteTokenizer_);
@@ -72,7 +73,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
     std::unique_ptr<Tokenizer> SharedTokenizerFactory::instance(const std::string &argument)
     {
         std::unique_ptr<Tokenizer> ptr(new Instance(
-            newTokenizer_, deleteTokenizer_, parse_, what_, argument.c_str()));
+            newTokenizer_, deleteTokenizer_, parse_, what_, argument.c_str(), argument.size()));
         return ptr;
     }
 }}}}}
