@@ -23,6 +23,13 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 
         struct ResourceLimits
         {
+            template <typename Archive>
+            void serialize(Archive &ar, const unsigned int)
+            {
+                ar & BOOST_SERIALIZATION_NVP(timeLimitMillis);
+                ar & BOOST_SERIALIZATION_NVP(realTimeLimitMillis);
+            }
+
             ResourceLimits()=default;
 
             ResourceLimits(const std::uint64_t timeLimitMillis_,
