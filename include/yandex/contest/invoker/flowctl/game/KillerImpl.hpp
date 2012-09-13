@@ -17,6 +17,9 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
     class KillerImpl: public Killer
     {
     public:
+        typedef std::string ControlGroupId;
+
+    public:
         struct Options
         {
             template <typename Archive>

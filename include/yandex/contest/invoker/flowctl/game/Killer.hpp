@@ -10,7 +10,6 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
     {
     public:
         typedef std::size_t Id;
-        typedef std::string ControlGroupId;
 
         enum class Status
         {
