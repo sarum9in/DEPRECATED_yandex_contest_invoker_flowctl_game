@@ -1,6 +1,7 @@
 #pragma once
 
 #include "yandex/contest/invoker/flowctl/game/Broker.hpp"
+#include "yandex/contest/invoker/flowctl/game/SharedTokenizer.hpp"
 
 #include "yandex/contest/system/unistd/DynamicLibrary.hpp"
 
@@ -91,6 +92,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 
             Process process;
             std::unique_ptr<Tokenizer> tokenizer;
+            Tokenizer::Status tokenizerStatus;
             std::string result;
             std::deque<char> inbuf, outbuf;
             ResourceLimits resourceLimits;
@@ -103,6 +105,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
     private:
         const ResourceLimits defaultResourceLimits_;
         system::unistd::DynamicLibrary tokenizerLibrary_;
+        SharedTokenizerFactory sharedTokenizerFactory_;
         IOInterface killerIO_;
         std::unique_ptr<KillerInterface> killer_;
         std::vector<Solution> solutions_;
