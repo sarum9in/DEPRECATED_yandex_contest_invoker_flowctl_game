@@ -39,6 +39,8 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 
         std::string unescape(std::istream &input, bool &end)
         {
+            if (!input)
+                BOOST_THROW_EXCEPTION(EndOfFileError());
             enum State
             {
                 ESCAPE,
@@ -64,6 +66,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                     default:
                         BOOST_ASSERT(false);
                     }
+                    state = ORDINAL;
                     break;
                 case ORDINAL:
                     switch (c)
