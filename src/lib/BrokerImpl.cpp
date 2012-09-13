@@ -2,12 +2,26 @@
 #include "yandex/contest/invoker/flowctl/game/KillerStreamInterface.hpp"
 #include "yandex/contest/invoker/flowctl/game/SharedTokenizer.hpp"
 
+#include "yandex/contest/SystemError.hpp"
+
 #include "yandex/contest/detail/LogHelper.hpp"
 
+#include "yandex/contest/system/unistd/Operations.hpp"
+
+#include <fcntl.h>
 #include <dlfcn.h>
 
 namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace game
 {
+    void setnonblock(const int fd)
+    {
+        int flags = fcntl(fd, F_GETFL, 0);
+        if (flags < 0)
+            BOOST_THROW_EXCEPTION(SystemError("fcntl") << system::unistd::info::fd(fd));
+        if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) < 0)
+            BOOST_THROW_EXCEPTION(SystemError("fcntl") << system::unistd::info::fd(fd));
+    }
+
     BrokerImpl::BrokerImpl(const Options &options):
         defaultResourceLimits_(options.defaultResourceLimits),
         tokenizerLibrary_(options.tokenizer, RTLD_LOCAL),
@@ -18,6 +32,8 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
     {
         for (std::size_t i = 0; i < solutions_.size(); ++i)
         {
+            setnonblock(solutions_[i].process.in);
+            setnonblock(solutions_[i].process.out);
             solutions_[i].resourceLimits = defaultResourceLimits_;
         }
     }
@@ -74,10 +90,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         BOOST_ASSERT_MSG(!sol.terminated, "Solution was already terminated!");
         BOOST_ASSERT_MSG(sol.tokenizer, "Begin was not called!");
         if (sol.tokenizerStatus == Tokenizer::Status::CONTINUE)
-        {
-            // need more
-            // TODO wait for other unwritten data (if needed)
-        }
+            communicate(id);
         if (discardRemaining)
             sol.inbuf.clear();
         Result result;

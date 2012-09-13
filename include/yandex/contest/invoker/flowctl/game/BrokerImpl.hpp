@@ -102,6 +102,8 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
     private:
         Solution &solution(const SolutionId id);
 
+        void communicate(const SolutionId id);
+
     private:
         const ResourceLimits defaultResourceLimits_;
         system::unistd::DynamicLibrary tokenizerLibrary_;

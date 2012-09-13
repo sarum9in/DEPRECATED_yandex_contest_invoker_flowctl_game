@@ -39,6 +39,7 @@ add_library(${PROJECT_NAME} SHARED
 
     src/lib/Broker.cpp
     src/lib/BrokerImpl.cpp
+    src/lib/BrokerImplCommunicate.cpp
     src/lib/BrokerInterface.cpp
     src/lib/BrokerTextInterface.cpp
 
