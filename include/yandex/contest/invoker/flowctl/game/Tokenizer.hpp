@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string>
+#include <vector>
+
 #include <cstdlib>
 
 #include <boost/noncopyable.hpp>
@@ -37,6 +40,22 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
          * \warning data is not a null-terminated string.
          */
         virtual Result operator()(const char *data, std::size_t size)=0;
+
+        Result operator()(const std::string &string);
+
+        Result operator()(const std::vector<char> &string);
+
+        template <typename T>
+        Result operator()(const T &iterable)
+        {
+            return (*this)(begin(iterable), end(iterable));
+        }
+
+        template <typename Iter>
+        Result operator()(const Iter &begin, const Iter &end)
+        {
+            return (*this)(std::vector<char>(begin, end));
+        }
 
         /*!
          * \brief If error has occurred, Tokenizer may return human-readable explanation.
