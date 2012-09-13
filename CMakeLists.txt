@@ -46,6 +46,10 @@ add_library(${PROJECT_NAME} SHARED
 )
 target_link_libraries(${PROJECT_NAME} ${libraries})
 
+add_library(${PROJECT_NAME}_tokenizer_split_char SHARED
+    src/tokenizers/split_char.c
+)
+
 add_binary_targets(bin_targets killer broker)
 
 # installation
