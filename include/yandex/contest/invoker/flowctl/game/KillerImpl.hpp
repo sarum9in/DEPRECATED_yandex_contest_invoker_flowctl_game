@@ -25,18 +25,16 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             template <typename Archive>
             void serialize(Archive &ar, const unsigned int)
             {
-                ar & BOOST_SERIALIZATION_NVP(protect);
+                ar & BOOST_SERIALIZATION_NVP(unprotected);
                 ar & BOOST_SERIALIZATION_NVP(pattern);
             }
 
             /*!
-             * \brief Do not operate on these processes.
+             * \brief Operate only with these processes.
              *
-             * \note Killer's process is always protected.
+             * \note Killer's process will be erased from this set.
              */
-            std::unordered_set<Id> protect;
-
-            //TODO black/white lists
+            std::unordered_set<Id> unprotected;
 
             /// The was of translation ids into cgroup names.
             std::string pattern = "id_%1%";
@@ -54,7 +52,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 
     private:
         system::cgroup::ControlGroup thisControlGroup_, parentControlGroup_;
-        std::unordered_set<ControlGroupId> protect_;
+        std::unordered_set<ControlGroupId> unprotected_;
         boost::format pattern_;
     };
 }}}}}

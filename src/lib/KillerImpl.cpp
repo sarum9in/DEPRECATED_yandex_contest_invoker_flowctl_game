@@ -11,16 +11,16 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         parentControlGroup_(thisControlGroup_.parent()),
         pattern_(options.pattern)
     {
-        protect_.insert(thisControlGroup_.name().string());
-        for (const Id id: options.protect)
-            protect_.insert(rawIdToCgroup(id));
+        for (const Id id: options.unprotected)
+            unprotected_.insert(rawIdToCgroup(id));
+        unprotected_.erase(thisControlGroup_.name().string());
     }
 
 #define YANDEX_FLOWCTL_KILLER(FUNCTION, ACT) \
     KillerImpl::Status KillerImpl::FUNCTION(const Id &id) \
     { \
         const ControlGroupId cid = rawIdToCgroup(id); \
-        if (protect_.find(cid) != protect_.end()) \
+        if (unprotected_.find(cid) == unprotected_.end()) \
             return Status::PROTECTED; \
         system::cgroup::ControlGroup cg(parentControlGroup_.attachChild(cid)); \
         ACT; \
