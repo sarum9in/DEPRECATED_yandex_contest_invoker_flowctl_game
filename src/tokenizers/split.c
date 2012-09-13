@@ -53,7 +53,7 @@ int tokenizer_parse(void *tok_, const char *data, size_t *size)
     assert(tok->sep);
     assert(tok->sep_size);
     size_t data_size = *size;
-    for (size_t i = 0; i <  data_size; ++i)
+    for (size_t i = 0; i < data_size; ++i)
     {
         assert(tok->over <  tok->sep_size);
         if (data[i] == tok->sep[tok->over])
