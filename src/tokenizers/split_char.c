@@ -3,6 +3,10 @@
 #include <string.h>
 #include <assert.h>
 
+#define TOKENIZER_FAIL -1
+#define TOKENIZER_CONTINUE 0
+#define TOKENIZER_ACCEPTED 1
+
 typedef struct
 {
     char sep;
@@ -36,11 +40,11 @@ int tokenizer_parse(void *tok_, const char *data, size_t *size)
     {
         // we accept character too
         *size = pos - data + 1;
-        return 1;
+        return TOKENIZER_ACCEPTED;
     }
     else
     {
         // no separator was found
-        return 0;
+        return TOKENIZER_CONTINUE;
     }
 }
