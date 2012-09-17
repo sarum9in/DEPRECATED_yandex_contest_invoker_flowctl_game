@@ -24,6 +24,7 @@ list(APPEND libraries ${Boost_LIBRARIES})
 list(APPEND libraries
     yandex_contest_common
     yandex_contest_system
+    yandex_contest_invoker
 )
 
 # Local
@@ -45,6 +46,8 @@ add_library(${PROJECT_NAME} SHARED
 
     src/lib/Tokenizer.cpp
     src/lib/SharedTokenizer.cpp
+
+    src/lib/Configurator.cpp
 )
 target_link_libraries(${PROJECT_NAME} ${libraries})
 

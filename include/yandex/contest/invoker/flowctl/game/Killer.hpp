@@ -1,5 +1,7 @@
 #pragma once
 
+#include "yandex/contest/invoker/Process.hpp"
+
 #include <string>
 
 #include <boost/noncopyable.hpp>
@@ -9,7 +11,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
     class Killer: private boost::noncopyable
     {
     public:
-        typedef std::size_t Id;
+        typedef Process::Id Id;
 
         enum class Status
         {
