@@ -19,6 +19,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                 {
                 case ' ':
                     output << "\\ ";
+                    break;
                 case '\n':
                     output << "\\n";
                     break;
