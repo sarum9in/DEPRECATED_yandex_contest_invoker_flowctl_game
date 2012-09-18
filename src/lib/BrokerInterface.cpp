@@ -7,16 +7,23 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         run(broker, recvCommand());
     }
 
-    void BrokerInterface::begin(const SolutionId id, const std::string &tokenizerArgument,
+    void BrokerInterface::begin(const SolutionId id,
+                                const TokenizerArgument &tokenizerArgument,
                                 const ResourceLimits &resourceLimits)
     {
         send(Command(Command::BEGIN, id, tokenizerArgument,
                      resourceLimits.timeLimitMillis, resourceLimits.realTimeLimitMillis));
     }
 
-    void BrokerInterface::begin(const SolutionId id, const std::string &tokenizerArgument)
+    void BrokerInterface::begin(const SolutionId id,
+                                const TokenizerArgument &tokenizerArgument)
     {
         send(Command(Command::BEGIN, id, tokenizerArgument));
+    }
+
+    void BrokerInterface::begin(const SolutionId id)
+    {
+        send(Command(Command::BEGIN, id));
     }
 
     void BrokerInterface::send(const SolutionId id, const std::string &msg)
@@ -48,6 +55,9 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         case Command::BEGIN:
             switch (command.args.size())
             {
+            case 0:
+                broker.begin(command.id);
+                break;
             case 1:
                 broker.begin(command.id, command.args[0]);
                 break;

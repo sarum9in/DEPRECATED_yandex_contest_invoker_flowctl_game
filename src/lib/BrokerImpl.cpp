@@ -24,6 +24,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 
     BrokerImpl::BrokerImpl(const Options &options):
         defaultResourceLimits_(options.defaultResourceLimits),
+        defaultTokenizerArgument(options.defaultTokenizerArgument),
         tokenizerLibrary_(options.tokenizer, RTLD_LOCAL),
         sharedTokenizerFactory_(tokenizerLibrary_),
         killerIO_(options.killer),
@@ -38,12 +39,19 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         }
     }
 
-    void BrokerImpl::begin(const SolutionId id, const std::string &tokenizerArgument)
+    void BrokerImpl::begin(const SolutionId id)
+    {
+        begin(id, defaultTokenizerArgument);
+    }
+
+    void BrokerImpl::begin(const SolutionId id,
+                           const TokenizerArgument &tokenizerArgument)
     {
         begin(id, tokenizerArgument, defaultResourceLimits_);
     }
 
-    void BrokerImpl::begin(const SolutionId id, const std::string &tokenizerArgument,
+    void BrokerImpl::begin(const SolutionId id,
+                           const TokenizerArgument &tokenizerArgument,
                            const ResourceLimits &resourceLimits)
     {
         Solution &sol = solution(id);

@@ -16,10 +16,14 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
     class BrokerInterface: public Broker
     {
     public:
-        virtual void begin(const SolutionId id, const std::string &tokenizerArgument,
+        virtual void begin(const SolutionId id,
+                           const TokenizerArgument &tokenizerArgument,
                            const ResourceLimits &resourceLimits) override;
 
-        virtual void begin(const SolutionId id, const std::string &tokenizerArgument) override;
+        virtual void begin(const SolutionId id,
+                           const TokenizerArgument &tokenizerArgument) override;
+
+        virtual void begin(const SolutionId id) override;
 
         virtual void send(const SolutionId id, const std::string &msg) override;
 

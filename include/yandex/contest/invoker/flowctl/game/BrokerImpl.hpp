@@ -68,15 +68,20 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             std::vector<Process> solutions;
             Process killer, judge;
             ResourceLimits defaultResourceLimits;
+            TokenizerArgument defaultTokenizerArgument;
         };
 
     public:
         explicit BrokerImpl(const Options &options);
 
-        virtual void begin(const SolutionId id, const std::string &tokenizerArgument,
+        virtual void begin(const SolutionId id,
+                           const TokenizerArgument &tokenizerArgument,
                            const ResourceLimits &resourceLimits) override;
 
-        virtual void begin(const SolutionId id, const std::string &tokenizerArgument) override;
+        virtual void begin(const SolutionId id,
+                           const TokenizerArgument &tokenizerArgument) override;
+
+        virtual void begin(const SolutionId id) override;
 
         virtual void send(const SolutionId id, const std::string &msg) override;
 
@@ -106,6 +111,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 
     private:
         const ResourceLimits defaultResourceLimits_;
+        const TokenizerArgument defaultTokenizerArgument;
         system::unistd::DynamicLibrary tokenizerLibrary_;
         SharedTokenizerFactory sharedTokenizerFactory_;
         IOInterface killerIO_;

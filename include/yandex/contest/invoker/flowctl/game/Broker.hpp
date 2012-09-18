@@ -20,6 +20,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
     public:
         typedef std::size_t SolutionId;
         typedef Killer::Id ProcessId;
+        typedef std::string TokenizerArgument;
 
         struct ResourceLimits
         {
@@ -83,11 +84,14 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
          * more then one active solution (solution is active after begin()
          * and inactive after end(), solution is inactive by default).
          */
-        virtual void begin(const SolutionId id, const std::string &tokenizerArgument,
+        virtual void begin(const SolutionId id, const TokenizerArgument &tokenizerArgument,
                            const ResourceLimits &resourceLimits)=0;
 
         /// begin(id, tokenizerArgument, defaultResourceLimits)
-        virtual void begin(const SolutionId id, const std::string &tokenizerArgument)=0;
+        virtual void begin(const SolutionId id, const TokenizerArgument &tokenizerArgument)=0;
+
+        /// begin(id, defaultTokenizerArgument)
+        virtual void begin(const SolutionId id)=0;
 
         /*!
          * \brief Send data.
