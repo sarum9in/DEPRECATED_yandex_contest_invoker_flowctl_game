@@ -21,11 +21,11 @@ KillerImpl::Options readOptions(const boost::filesystem::path &path)
 
 int main(int argc, char *argv[])
 {
-    BOOST_ASSERT(argc == 1 + 1);
-    KillerImpl killer(readOptions(argv[1]));
-    KillerStreamInterface iface(std::cin, std::cout);
     try
     {
+        BOOST_ASSERT(argc == 1 + 1);
+        KillerImpl killer(readOptions(argv[1]));
+        KillerStreamInterface iface(std::cin, std::cout);
         for (;;)
             iface.runOnce(killer);
     }

@@ -21,22 +21,22 @@ yag::BrokerImpl::Options readOptions(const boost::filesystem::path &path)
 
 int main(int argc, char *argv[])
 {
-    BOOST_ASSERT(argc == 1 + 1);
-    const yag::BrokerImpl::Options options = readOptions(argv[1]);
-    yag::BrokerImpl broker(options);
-    yag::BrokerImpl::IOInterface ioIface(options.judge);
-    std::unique_ptr<yag::BrokerInterface> iface;
-    switch (options.protocol)
-    {
-    case yag::BrokerImpl::Options::Protocol::TEXT:
-        iface.reset(new yag::BrokerTextInterface(ioIface.input, ioIface.output));
-        break;
-    default:
-        std::cerr << "Unsupported protocol " << options.protocol << ".";
-        return 1;
-    }
     try
     {
+        BOOST_ASSERT(argc == 1 + 1);
+        const yag::BrokerImpl::Options options = readOptions(argv[1]);
+        yag::BrokerImpl broker(options);
+        yag::BrokerImpl::IOInterface ioIface(options.judge);
+        std::unique_ptr<yag::BrokerInterface> iface;
+        switch (options.protocol)
+        {
+        case yag::BrokerImpl::Options::Protocol::TEXT:
+            iface.reset(new yag::BrokerTextInterface(ioIface.input, ioIface.output));
+            break;
+        default:
+            std::cerr << "Unsupported protocol " << options.protocol << ".";
+            return 1;
+        }
         for (;;)
             iface->runOnce(broker);
     }
