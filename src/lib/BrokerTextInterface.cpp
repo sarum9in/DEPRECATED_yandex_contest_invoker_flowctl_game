@@ -1,7 +1,11 @@
 #include "yandex/contest/invoker/flowctl/game/BrokerTextInterface.hpp"
 
+#include "yandex/contest/SystemError.hpp"
+
 #include <utility>
 #include <type_traits>
+
+#include <cstring>
 
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/nvp.hpp>
@@ -40,7 +44,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 
         std::string unescape(std::istream &input, bool &end)
         {
-            if (!input)
+            if (end)
                 BOOST_THROW_EXCEPTION(EndOfFileError());
             enum State
             {
@@ -65,7 +69,11 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                         buf.push_back('\n');
                         break;
                     default:
-                        BOOST_ASSERT(false);
+                        {
+                            char msg[] = "Unknown escape sequence \"\\_\".";
+                            *std::strrchr(msg, '_') = c;
+                            BOOST_ASSERT_MSG(false, msg);
+                        }
                     }
                     state = ORDINAL;
                     break;
@@ -81,10 +89,11 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                     break;
                 }
             }
+            if (input.bad())
+                BOOST_THROW_EXCEPTION(SystemError("read"));
             BOOST_ASSERT(state != ESCAPE);
             end = !input || c == '\n';
-            if (!end)
-                BOOST_ASSERT(c == ' ');
+            BOOST_ASSERT(end || c == ' ');
             return buf;
         }
 
@@ -113,6 +122,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             template <typename T>
             OutputArchive &operator<<(const T &obj)
             {
+                BOOST_ASSERT(!last_);
                 save(obj);
                 return *this;
             }
@@ -147,6 +157,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             template <typename T>
             void save(const std::vector<T> &v)
             {
+                last_ = true;
                 for (const T &obj: v)
                     save(obj);
             }
@@ -155,15 +166,16 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             template <typename T>
             void print(const T &obj)
             {
-                if (!first)
+                if (!first_)
                     output_ << ' ';
-                first = false;
+                first_ = false;
                 escape(output_, boost::lexical_cast<std::string>(obj));
             }
 
         private:
             std::ostream &output_;
-            bool first = true;
+            bool first_ = true;
+            bool last_ = false;
         };
 
         class InputArchive
@@ -181,6 +193,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             InputArchive &operator>>(T &obj)
             {
                 BOOST_ASSERT(!end_);
+                BOOST_ASSERT(!last_);
                 load(obj);
                 return *this;
             }
@@ -210,6 +223,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             template <typename T>
             void load(std::vector<T> &v)
             {
+                last_ = true;
                 v.clear();
                 while (!end_)
                 {
@@ -222,6 +236,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         private:
             std::istream &input_;
             bool end_ = false;
+            bool last_ = false;
         };
     }
 
