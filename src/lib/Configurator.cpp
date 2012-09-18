@@ -63,6 +63,8 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             }
             dumpOptions(container, broker, brokerOptions, brokerConfig);
             dumpOptions(container, killer, killerOptions, killerConfig);
+            judge->setArguments(judge->executable(),
+                                boost::lexical_cast<std::string>(solutions.size()));
             // the last command
             configured_ = true;
         }
