@@ -6,6 +6,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/filesystem/operations.hpp>
+#include <boost/lexical_cast.hpp>
 
 namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace game
 {
@@ -42,6 +43,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             auto connect =
                 [&](const ProcessPointer &proc, BrokerImpl::Process &cfg)
                 {
+                    cfg.id = proc->id();
                     Pipe in = processGroup->createPipe(), out = processGroup->createPipe();
                     proc->setStream(0, in.readEnd());
                     proc->setStream(1, out.writeEnd());
