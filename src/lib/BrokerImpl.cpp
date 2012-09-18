@@ -25,7 +25,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
     BrokerImpl::BrokerImpl(const Options &options):
         defaultResourceLimits_(options.defaultResourceLimits),
         defaultTokenizerArgument(options.defaultTokenizerArgument),
-        tokenizerLibrary_(options.tokenizer, RTLD_LOCAL),
+        tokenizerLibrary_(options.tokenizer, RTLD_NOW | RTLD_LOCAL),
         sharedTokenizerFactory_(tokenizerLibrary_),
         killerIO_(options.killer),
         killer_(new KillerStreamInterface(killerIO_.input, killerIO_.output)),
