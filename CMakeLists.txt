@@ -31,7 +31,6 @@ list(APPEND libraries
 include_directories(include)
 
 # Targets
-
 add_library(${PROJECT_NAME} SHARED
     src/lib/Killer.cpp
     src/lib/KillerImpl.cpp
@@ -61,7 +60,7 @@ add_library(${PROJECT_NAME}_tokenizer_split SHARED
 
 add_binary_targets(bin_targets killer broker)
 
-# installation
+# Installation
 install(DIRECTORY include DESTINATION .)
 install(TARGETS ${PROJECT_NAME} ${bin_targets}
     RUNTIME DESTINATION bin
