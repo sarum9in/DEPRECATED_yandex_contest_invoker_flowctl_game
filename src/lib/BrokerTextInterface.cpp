@@ -48,16 +48,28 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                 BOOST_THROW_EXCEPTION(EndOfFileError());
             enum State
             {
-                ESCAPE,
-                ORDINAL
+                INIT,
+                ORDINAL,
+                ESCAPE
             };
             std::string buf;
             char c;
-            State state = ORDINAL;
+            State state = INIT;
             while (input.get(c) && c != '\n' && c != ' ')
             {
                 switch (state)
                 {
+                case INIT:
+                case ORDINAL:
+                    switch (c)
+                    {
+                    case '\\':
+                        state = ESCAPE;
+                        break;
+                    default:
+                        buf.push_back(c);
+                    }
+                    break;
                 case ESCAPE:
                     switch (c)
                     {
@@ -77,18 +89,10 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                     }
                     state = ORDINAL;
                     break;
-                case ORDINAL:
-                    switch (c)
-                    {
-                    case '\\':
-                        state = ESCAPE;
-                        break;
-                    default:
-                        buf.push_back(c);
-                    }
-                    break;
                 }
             }
+            if (!input && state == INIT)
+                BOOST_THROW_EXCEPTION(EndOfFileError());
             if (input.bad())
                 BOOST_THROW_EXCEPTION(SystemError("read"));
             BOOST_ASSERT(state != ESCAPE);
