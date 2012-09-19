@@ -35,10 +35,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 
         struct IOInterface
         {
-            explicit IOInterface(const Process &process):
-                inputBuf(process.in, std::ios::in),
-                outputBuf(process.out, std::ios::out),
-                input(&inputBuf), output(&outputBuf) {}
+            explicit IOInterface(const Process &process);
 
             __gnu_cxx::stdio_filebuf<char> inputBuf, outputBuf;
             std::istream input;

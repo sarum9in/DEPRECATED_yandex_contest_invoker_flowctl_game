@@ -24,6 +24,11 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             BOOST_THROW_EXCEPTION(SystemError("fcntl") << system::unistd::info::fd(fd));
     }
 
+    BrokerImpl::IOInterface::IOInterface(const Process &process):
+        inputBuf(process.out, std::ios::in),
+        outputBuf(process.in, std::ios::out),
+        input(&inputBuf), output(&outputBuf) {}
+
     BrokerImpl::BrokerImpl(const Options &options):
         defaultResourceLimits_(options.defaultResourceLimits),
         defaultTokenizerArgument(options.defaultTokenizerArgument),
