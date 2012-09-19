@@ -1,5 +1,7 @@
 #include "yandex/contest/invoker/flowctl/game/KillerInterface.hpp"
 
+#include "yandex/contest/detail/LogHelper.hpp"
+
 namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace game
 {
     KillerInterface::Status KillerInterface::freeze(const Id &id)
@@ -22,7 +24,14 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 
     void KillerInterface::runOnce(Killer &killer)
     {
-        send(run(killer, recvCommand()));
+        STREAM_INFO << "Waiting for next command...";
+        const Command command = recvCommand();
+        STREAM_INFO << "Received " << STREAM_OBJECT(command) << ", executing...";
+        const Status status = run(killer, recvCommand());
+        STREAM_INFO << "Command " << STREAM_OBJECT(command) <<
+                       " was executed with status = " << status << ", sending...";
+        send(status);
+        STREAM_INFO << "Status " << status << " was successfully sent.";
     }
 
     KillerInterface::Status KillerInterface::run(Killer &killer, const Command &command)

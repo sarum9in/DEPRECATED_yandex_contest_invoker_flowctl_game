@@ -1,6 +1,8 @@
 #include "yandex/contest/invoker/flowctl/game/KillerImpl.hpp"
 #include "yandex/contest/invoker/flowctl/game/KillerStreamInterface.hpp"
 
+#include "yandex/contest/detail/LogHelper.hpp"
+
 #include "yandex/contest/config/InputArchive.hpp"
 
 #include <boost/assert.hpp>
@@ -31,8 +33,7 @@ int main(int argc, char *argv[])
     }
     catch (EndOfFileError &e)
     {
-        // it's OK
-        // does nothing
+        STREAM_INFO << "EOF was reached, terminating.";
     }
     catch (std::exception &e)
     {

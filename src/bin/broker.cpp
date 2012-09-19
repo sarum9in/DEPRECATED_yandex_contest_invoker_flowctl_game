@@ -1,6 +1,8 @@
 #include "yandex/contest/invoker/flowctl/game/BrokerImpl.hpp"
 #include "yandex/contest/invoker/flowctl/game/BrokerTextInterface.hpp"
 
+#include "yandex/contest/detail/LogHelper.hpp"
+
 #include "yandex/contest/config/InputArchive.hpp"
 
 #include <boost/assert.hpp>
@@ -42,8 +44,7 @@ int main(int argc, char *argv[])
     }
     catch (yag::EndOfFileError &e)
     {
-        // it's OK
-        // does nothing
+        STREAM_INFO << "EOF was reached, terminating.";
     }
     catch (std::exception &e)
     {

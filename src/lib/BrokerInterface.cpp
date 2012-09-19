@@ -1,10 +1,16 @@
 #include "yandex/contest/invoker/flowctl/game/BrokerInterace.hpp"
 
+#include "yandex/contest/detail/LogHelper.hpp"
+
 namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace game
 {
     void BrokerInterface::runOnce(Broker &broker)
     {
-        run(broker, recvCommand());
+        STREAM_INFO << "Waiting for next command...";
+        const Command command = recvCommand();
+        STREAM_INFO << "Received " << STREAM_OBJECT(command) << ", executing...";
+        run(broker, command);
+        STREAM_INFO << "Command " << STREAM_OBJECT(command) << " was successfully executed.";
     }
 
     void BrokerInterface::begin(const SolutionId id,
