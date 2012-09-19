@@ -27,6 +27,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         boost::filesystem::path killerLog, judgeLog, brokerLog;
         boost::filesystem::path tokenizer;
         Broker::ResourceLimits defaultResourceLimits;
+        Broker::TokenizerArgument defaultTokenizerArgument;
 
         /*!
          * \brief Setup killer, judge, broker and solutions.

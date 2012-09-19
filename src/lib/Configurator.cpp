@@ -38,6 +38,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             brokerOptions.protocol = protocol;
             brokerOptions.tokenizer = tokenizer;
             brokerOptions.defaultResourceLimits = defaultResourceLimits;
+            brokerOptions.defaultTokenizerArgument = defaultTokenizerArgument;
             broker->setStream(2, File(brokerLog, AccessMode::WRITE_ONLY));
             std::size_t brokerFD = 3;
             auto connect =
