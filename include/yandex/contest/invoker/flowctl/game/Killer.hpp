@@ -1,5 +1,7 @@
 #pragma once
 
+#include "yandex/contest/StreamEnum.hpp"
+
 #include "yandex/contest/invoker/Process.hpp"
 
 #include <string>
@@ -13,11 +15,11 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
     public:
         typedef Process::Id Id;
 
-        enum class Status
-        {
+        YANDEX_CONTEST_INCLASS_STREAM_ENUM_CLASS(Status,
+        (
             OK,
             PROTECTED
-        };
+        ))
 
     public:
         virtual Status freeze(const Id &id)=0;
