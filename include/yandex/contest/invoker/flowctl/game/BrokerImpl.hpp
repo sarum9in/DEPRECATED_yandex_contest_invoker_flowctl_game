@@ -3,7 +3,7 @@
 #include "yandex/contest/invoker/flowctl/game/Broker.hpp"
 #include "yandex/contest/invoker/flowctl/game/SharedTokenizer.hpp"
 
-#include "yandex/contest/system/unistd/DynamicLibrary.hpp"
+#include "yandex/contest/system/unistd/DynamicLoader.hpp"
 
 #include <vector>
 #include <string>

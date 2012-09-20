@@ -2,7 +2,7 @@
 
 #include "yandex/contest/invoker/flowctl/game/Tokenizer.hpp"
 
-#include "yandex/contest/system/unistd/DynamicLibrary.hpp"
+#include "yandex/contest/system/unistd/DynamicLoader.hpp"
 
 #include <cstdint>
 
