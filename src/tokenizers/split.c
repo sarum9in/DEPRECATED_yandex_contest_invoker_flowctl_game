@@ -6,6 +6,15 @@
 #define TOKENIZER_CONTINUE 0
 #define TOKENIZER_ACCEPTED 1
 
+/*!
+ * \file
+ *
+ * This algorithm does not work correct on overlapping strings.
+ * May be reimplemented using KMP.
+ */
+
+#warning "See comments above about implementation."
+
 typedef struct
 {
     char *sep;
