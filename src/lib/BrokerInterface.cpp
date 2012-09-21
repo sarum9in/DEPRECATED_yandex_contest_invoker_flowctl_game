@@ -18,7 +18,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                                 const ResourceLimits &resourceLimits)
     {
         send(Command(Command::BEGIN, id, tokenizerArgument,
-                     resourceLimits.timeLimitMillis, resourceLimits.realTimeLimitMillis));
+                     resourceLimits.timeLimit.count(), resourceLimits.realTimeLimit.count()));
     }
 
     void BrokerInterface::begin(const SolutionId id,
@@ -69,8 +69,12 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                 break;
             case 3:
                 broker.begin(command.id, command.args[0], ResourceLimits(
-                                 boost::lexical_cast<std::uint64_t>(command.args[1]),
-                                 boost::lexical_cast<std::uint64_t>(command.args[2])));
+                             std::chrono::milliseconds(
+                                 boost::lexical_cast<std::chrono::milliseconds::rep>(
+                                     command.args[1])),
+                             std::chrono::milliseconds(
+                                 boost::lexical_cast<std::chrono::milliseconds::rep>(
+                                     command.args[2]))));
                 break;
             default:
                 BOOST_ASSERT(false);

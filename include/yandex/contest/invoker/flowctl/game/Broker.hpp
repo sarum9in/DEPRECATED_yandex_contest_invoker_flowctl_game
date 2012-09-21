@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <string>
+#include <chrono>
 #include <limits>
 #include <memory>
 
@@ -27,19 +28,19 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             template <typename Archive>
             void serialize(Archive &ar, const unsigned int)
             {
-                ar & BOOST_SERIALIZATION_NVP(timeLimitMillis);
-                ar & BOOST_SERIALIZATION_NVP(realTimeLimitMillis);
+                ar & boost::serialization::make_nvp("timeLimitMillis", timeLimit);
+                ar & boost::serialization::make_nvp("realTimeLimitMillis", realTimeLimit);
             }
 
             ResourceLimits()=default;
 
-            ResourceLimits(const std::uint64_t timeLimitMillis_,
-                           const std::uint64_t realTimeLimitMillis_):
-                timeLimitMillis(timeLimitMillis_),
-                realTimeLimitMillis(realTimeLimitMillis_) {}
+            ResourceLimits(const std::chrono::milliseconds timeLimit_,
+                           const std::chrono::milliseconds realTimeLimit_):
+                timeLimit(timeLimit_),
+                realTimeLimit(realTimeLimit_) {}
 
-            std::uint64_t timeLimitMillis = std::numeric_limits<std::uint64_t>::max();
-            std::uint64_t realTimeLimitMillis = std::numeric_limits<std::uint64_t>::max();
+            std::chrono::milliseconds timeLimit = std::chrono::milliseconds::max();
+            std::chrono::milliseconds realTimeLimit = std::chrono::milliseconds::max();
         };
 
         struct Result
