@@ -88,8 +88,8 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             switch (command.args.size())
             {
             case 0:
-                break;
                 send(broker.end(command.id));
+                break;
             case 1:
                 send(broker.end(command.id, boost::lexical_cast<bool>(command.args[0])));
                 break;
