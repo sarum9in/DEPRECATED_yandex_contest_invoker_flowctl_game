@@ -73,10 +73,18 @@ BOOST_AUTO_TEST_CASE(parted)
     checkAccepted("\n23", 1);
 }
 
-BOOST_AUTO_TEST_CASE(overlapping)
+BOOST_AUTO_TEST_CASE(overlapping0)
 {
     tok = splitFactory.instance("121");
     checkAccepted("1121", 4);
+}
+
+#warning "See split tokenizer source, should be fixed in the future."
+BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES(overlapping2, 1)
+BOOST_AUTO_TEST_CASE(overlapping2)
+{
+    tok = splitFactory.instance("axbayc");
+    checkAccepted("axbaxbayc", 9);
 }
 
 BOOST_AUTO_TEST_SUITE_END() // split
