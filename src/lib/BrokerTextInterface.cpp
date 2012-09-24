@@ -58,7 +58,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             std::string buf;
             char c;
             State state = INIT;
-            while (input.get(c) && c != '\n' && c != ' ')
+            while (input.get(c) && c != '\n' && !(state != ESCAPE && c == ' '))
             {
                 switch (state)
                 {
