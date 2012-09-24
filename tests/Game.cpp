@@ -74,13 +74,13 @@ BOOST_FIXTURE_TEST_SUITE(Game, GameFixture)
 
 BOOST_AUTO_TEST_CASE(empty)
 {
-    setJudge(testsResourcesSourceDir / "judge.py");
+    setJudge(testsResourcesSourceDir / "killer_judge.py");
     run();
 }
 
 BOOST_AUTO_TEST_CASE(kill_all)
 {
-    setJudge(testsResourcesSourceDir / "judge.py");
+    setJudge(testsResourcesSourceDir / "killer_judge.py");
     addSolution(3, "sleep", "5");
     addSolution(4, "sleep", "5");
     addSolution(5, "sleep", "5");
