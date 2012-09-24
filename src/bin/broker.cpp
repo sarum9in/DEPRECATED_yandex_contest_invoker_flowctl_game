@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
     catch (yag::EndOfFileError &e)
     {
         STREAM_INFO << "EOF was reached, terminating.";
+        STREAM_DEBUG << e.what();
     }
     catch (std::exception &e)
     {

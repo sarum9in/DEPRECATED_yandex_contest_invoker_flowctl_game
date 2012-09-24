@@ -34,6 +34,7 @@ int main(int argc, char *argv[])
     catch (EndOfFileError &e)
     {
         STREAM_INFO << "EOF was reached, terminating.";
+        STREAM_DEBUG << e.what();
     }
     catch (std::exception &e)
     {
