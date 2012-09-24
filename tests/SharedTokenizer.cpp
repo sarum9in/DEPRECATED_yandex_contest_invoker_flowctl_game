@@ -73,6 +73,12 @@ BOOST_AUTO_TEST_CASE(parted)
     checkAccepted("\n23", 1);
 }
 
+BOOST_AUTO_TEST_CASE(overlapping)
+{
+    tok = splitFactory.instance("121");
+    checkAccepted("1121", 4);
+}
+
 BOOST_AUTO_TEST_SUITE_END() // split
 
 BOOST_AUTO_TEST_SUITE_END() // SharedTokenizer
