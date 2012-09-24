@@ -27,7 +27,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         STREAM_INFO << "Waiting for next command...";
         const Command command = recvCommand();
         STREAM_INFO << "Received " << STREAM_OBJECT(command) << ", executing...";
-        const Status status = run(killer, recvCommand());
+        const Status status = run(killer, command);
         STREAM_INFO << "Command " << STREAM_OBJECT(command) <<
                        " was executed with status = " << status << ", sending...";
         send(status);
