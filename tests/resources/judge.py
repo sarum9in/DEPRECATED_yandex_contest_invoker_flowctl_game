@@ -3,6 +3,7 @@
 import sys
 import time
 import math
+import traceback
 
 
 def _escape(obj):
@@ -84,7 +85,9 @@ def log(*args, **kwargs):
     ftime, itime = math.modf(time.time())
     _1 = time.strftime("%Y-%b-%d %T", time.localtime(itime))
     _2 = str(ftime)[2:8]
-    print("[{}.{}] INFO [JUDGE] -".format(_1, _2), *args, **kwargs)
+    tb = traceback.extract_stack()[-2]
+    line = " -> ".join(map(str.strip, traceback.format_list([tb])[0].strip().split('\n')))
+    print("[{}.{}] INFO [{}] -".format(_1, _2, line), *args, **kwargs)
 
 
 def terminate(id):
@@ -100,13 +103,13 @@ def _begin_1(id):
 
 
 def _begin_2(id, tokenizer_argument):
-    log("Begin", id, tokenizer_argument)
+    log("Begin", [id, tokenizer_argument])
     print("BEGIN", id, _escape(tokenizer_argument))
     sys.stdout.flush()
 
 
 def _begin_3(id, tokenizer_argument, resource_limits):
-    log("Begin", id, tokenizer_argument, resource_limits)
+    log("Begin", id, [tokenizer_argument, resource_limits])
     assert isinstance(resource_limits, ResourceLimits),\
         "resource_limits should be the instance of ResourceLimits"
     print("BEGIN", id, _escape(tokenizer_argument), _escape(resource_limits))
@@ -117,7 +120,7 @@ def begin(id, *args):
 
 
 def send(id, msg):
-    log("Send", id, msg)
+    log("Send", [id, msg])
     print("SEND", id, _escape(msg))
     sys.stdout.flush()
 
