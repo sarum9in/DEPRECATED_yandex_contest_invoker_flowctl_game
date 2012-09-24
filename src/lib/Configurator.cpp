@@ -61,6 +61,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             {
                 connect(solutions[i], brokerOptions.solutions[i]);
                 killerOptions.unprotected.insert(solutions[i]->id());
+                solutions[i]->setTerminateGroupOnCrash(false);
             }
             dumpOptions(container, broker, brokerOptions, brokerConfig);
             dumpOptions(container, killer, killerOptions, killerConfig);
