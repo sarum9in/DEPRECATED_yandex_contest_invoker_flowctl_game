@@ -34,6 +34,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 
         virtual Result operator()(const char *data, std::size_t size) override
         {
+            BOOST_ASSERT(data);
             const int result = parse_(instance_, data, &size);
             if (result < 0)
                 return Result{Status::FAIL, size};
