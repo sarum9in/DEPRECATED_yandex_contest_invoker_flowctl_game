@@ -33,12 +33,27 @@ struct GameFixture: ContainerFixture
         broker = pn(0, "broker", "yandex_contest_invoker_flowctl_game_broker");
         killer = pn(1, "killer", "yandex_contest_invoker_flowctl_game_killer");
         cfg.tokenizer = "yandex_contest_invoker_flowctl_game_tokenizer_split_char";
+        pushLibraries();
+    }
+
+    void pushLibraries()
+    {
+        push(testsResourcesSourceDir / "judge.py", {0, 0}, 0644);
+    }
+
+    boost::filesystem::path push(const boost::filesystem::path &path,
+                                 const unistd::access::Id &id,
+                                 const mode_t mode)
+    {
+        const boost::filesystem::path path_ = "/" / path.filename();
+        cnt->filesystem().push(path, path_, id, mode);
+        return path_;
     }
 
     /// \note Judge is always added from source tree.
     ya::ProcessPointer setJudge(const boost::filesystem::path &path)
     {
-        cnt->filesystem().push(path, "/" / path.filename(), {0, 0}, 0755);
+        push(path, {0, 0}, 0755);
         return judge = pn(2, "judge", "/" / path.filename());
     }
 
@@ -46,6 +61,19 @@ struct GameFixture: ContainerFixture
     ya::ProcessPointer addSolution(Args &&...args)
     {
         const ya::ProcessPointer pp = p(std::forward<Args>(args)...);
+        cfg.solutions.push_back(pp);
+        return pp;
+    }
+
+    template <typename Arg0, typename ... Args>
+    ya::ProcessPointer addSolutionCopy(Arg0 &&arg0,
+                                       const boost::filesystem::path &executable,
+                                       Args &&...args)
+    {
+        push(executable, {0, 0}, 0755);
+        const ya::ProcessPointer pp = p(std::forward<Arg0>(arg0),
+                                        "/" / executable.filename(),
+                                        std::forward<Args>(args)...);
         cfg.solutions.push_back(pp);
         return pp;
     }
