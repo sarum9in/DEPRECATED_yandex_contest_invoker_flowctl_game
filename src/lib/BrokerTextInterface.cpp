@@ -1,6 +1,9 @@
 #include "yandex/contest/invoker/flowctl/game/BrokerTextInterface.hpp"
 
 #include "yandex/contest/SystemError.hpp"
+#include "yandex/contest/TypeInfo.hpp"
+
+#include "yandex/contest/detail/LogHelper.hpp"
 
 #include <utility>
 #include <type_traits>
@@ -196,9 +199,26 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             template <typename T>
             InputArchive &operator>>(T &obj)
             {
-                BOOST_ASSERT(!end_);
+                STREAM_TRACE << "Trying to read value type = \"" << typeinfo::name(obj) << "\".";
+                if (end_)
+                    BOOST_THROW_EXCEPTION(EndOfFileError());
                 BOOST_ASSERT(!last_);
                 load(obj);
+                STREAM_TRACE << "Object of type = \"" << typeinfo::name(obj) << "\" was read," <<
+                                " end = " << end_ << ".";
+                return *this;
+            }
+
+            /// \note end_ is treated in special way here
+            template <typename T>
+            InputArchive &operator>>(std::vector<T> &obj)
+            {
+                STREAM_TRACE << "Trying to read value of vector type = \"" <<
+                                typeinfo::name(obj) << "\".";
+                BOOST_ASSERT(!last_);
+                load(obj);
+                STREAM_TRACE << "Object of vector type = \"" << typeinfo::name(obj) <<
+                                "\" was read, end = " << end_ << ".";
                 return *this;
             }
 
@@ -232,7 +252,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                 while (!end_)
                 {
                     T obj;
-                    load(obj);
+                    (*this) >> obj;
                     v.push_back(std::move(obj));
                 }
             }
