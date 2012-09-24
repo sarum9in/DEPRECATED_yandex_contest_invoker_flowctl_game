@@ -5,7 +5,7 @@ import time
 import math
 
 
-def escape(obj):
+def _escape(obj):
     obj = str(obj)
     buf = []
     transform = {' ': '\\ ', '\n': '\\n', '\\': '\\\\'}
@@ -14,11 +14,11 @@ def escape(obj):
     return "".join(buf)
 
 
-def join(*args):
-    return " ".join(escape(arg) for arg in args)
+def _join(*args):
+    return " ".join(_escape(arg) for arg in args)
 
 
-def split(line):
+def _split(line):
     tokens = []
     buf = []
     INIT = 0
@@ -72,7 +72,7 @@ class Result(object):
 
     @staticmethod
     def from_line(line):
-        return Result(*split(line))
+        return Result(*_split(line))
 
     def __repr__(self):
         return "Result(status='{}', data='{}')".format(
@@ -93,32 +93,32 @@ def terminate(id):
     sys.stdout.flush()
 
 
-def begin_1(id):
+def _begin_1(id):
     log("Begin", id)
     print("BEGIN", id)
     sys.stdout.flush()
 
 
-def begin_2(id, tokenizer_argument):
+def _begin_2(id, tokenizer_argument):
     log("Begin", id, tokenizer_argument)
-    print("BEGIN", id, escape(tokenizer_argument))
+    print("BEGIN", id, _escape(tokenizer_argument))
     sys.stdout.flush()
 
 
-def begin_3(id, tokenizer_argument, resource_limits):
+def _begin_3(id, tokenizer_argument, resource_limits):
     log("Begin", id, tokenizer_argument, resource_limits)
     assert isinstance(resource_limits, ResourceLimits),\
         "resource_limits should be the instance of ResourceLimits"
-    print("BEGIN", id, escape(tokenizer_argument), escape(resource_limits))
+    print("BEGIN", id, _escape(tokenizer_argument), _escape(resource_limits))
 
 
 def begin(id, *args):
-    return [begin_1, begin_2, begin_3][len(args)](id, *args)
+    return [_begin_1, _begin_2, _begin_3][len(args)](id, *args)
 
 
 def send(id, msg):
     log("Send", id, msg)
-    print("SEND", id, escape(msg))
+    print("SEND", id, _escape(msg))
     sys.stdout.flush()
 
 
