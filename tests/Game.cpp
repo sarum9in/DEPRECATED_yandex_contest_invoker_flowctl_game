@@ -115,4 +115,11 @@ BOOST_AUTO_TEST_CASE(kill_all)
     run();
 }
 
+BOOST_AUTO_TEST_CASE(echo)
+{
+    setJudge(testsResourcesSourceDir / "echo_judge.py");
+    addSolutionCopy(3, testsResourcesSourceDir / "echo_solution.py");
+    run();
+}
+
 BOOST_AUTO_TEST_SUITE_END()
