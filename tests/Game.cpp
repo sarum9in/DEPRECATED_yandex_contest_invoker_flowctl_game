@@ -30,16 +30,35 @@ struct GameFixture: ContainerFixture
         brokerLog = cnt->filesystem().keepInRoot(cfg.brokerLog = "/brokerLog");
         killerLog = cnt->filesystem().keepInRoot(cfg.killerLog = "/killerLog");
         judgeLog = cnt->filesystem().keepInRoot(cfg.judgeLog = "/judgeLog");
-        broker = p(0, "yandex_contest_invoker_flowctl_game_broker");
-        killer = p(1, "yandex_contest_invoker_flowctl_game_killer");
+        broker = pn(0, "broker", "yandex_contest_invoker_flowctl_game_broker");
+        killer = pn(1, "killer", "yandex_contest_invoker_flowctl_game_killer");
         cfg.tokenizer = "yandex_contest_invoker_flowctl_game_tokenizer_split_char";
+    }
+
+    /// \note Judge is always added from source tree.
+    ya::ProcessPointer setJudge(const boost::filesystem::path &path)
+    {
+        cnt->filesystem().push(path, "/" / path.filename(), {0, 0}, 0755);
+        return judge = pn(2, "judge", "/" / path.filename());
+    }
+
+    template <typename ... Args>
+    ya::ProcessPointer addSolution(Args &&...args)
+    {
+        const ya::ProcessPointer pp = p(std::forward<Args>(args)...);
+        cfg.solutions.push_back(pp);
+        return pp;
     }
 
     void run()
     {
-        cfg.configure();
+        cfg.configure("/brokerConfig", "/killerConfig");
         pgr = pg->synchronizedCall();
-        verifyOK();
+        verifyPG(PGR::CompletionStatus::OK);
+        for (std::size_t i = 0; i <= 2; ++i)
+            verifyP(i, PR::CompletionStatus::OK);
+        for (std::size_t i = 0; i < cfg.solutions.size(); ++i)
+            infoP(i + 3);
         BOOST_TEST_MESSAGE("Broker: <<<\n" << readData(brokerLog) << "\n>>> Broker");
         BOOST_TEST_MESSAGE("Killer: <<<\n" << readData(killerLog) << "\n>>> Killer");
         BOOST_TEST_MESSAGE("Judge: <<<\n" << readData(judgeLog) << "\n>>> Judge");
@@ -55,7 +74,16 @@ BOOST_FIXTURE_TEST_SUITE(Game, GameFixture)
 
 BOOST_AUTO_TEST_CASE(empty)
 {
-    judge = p(2, testsResourcesSourceDir / "judge.py");
+    setJudge(testsResourcesSourceDir / "judge.py");
+    run();
+}
+
+BOOST_AUTO_TEST_CASE(kill_all)
+{
+    setJudge(testsResourcesSourceDir / "judge.py");
+    addSolution(3, "sleep", "5");
+    addSolution(4, "sleep", "5");
+    addSolution(5, "sleep", "5");
     run();
 }
 
