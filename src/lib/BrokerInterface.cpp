@@ -99,6 +99,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             break;
         case Command::TERMINATE:
             BOOST_ASSERT(command.args.size() == 0);
+            broker.terminate(command.id);
             break;
         }
     }
