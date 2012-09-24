@@ -69,6 +69,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         sol.tokenizerStatus = Tokenizer::Status::CONTINUE;
         sol.result.clear();
         sol.resourceLimits = resourceLimits;
+        if (!sol.outbuf.empty())
         {
             const Tokenizer::Result result = (*sol.tokenizer)(sol.outbuf);
             sol.tokenizerStatus = result.status;
