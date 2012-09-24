@@ -5,6 +5,8 @@
 
 #include "yandex/contest/config/InputArchive.hpp"
 
+#include "yandex/contest/system/Trace.hpp"
+
 #include <boost/assert.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
@@ -25,6 +27,7 @@ int main(int argc, char *argv[])
 {
     try
     {
+        yandex::contest::system::Trace::handle(SIGABRT);
         BOOST_ASSERT(argc == 1 + 1);
         KillerImpl killer(readOptions(argv[1]));
         KillerStreamInterface iface(std::cin, std::cout);
