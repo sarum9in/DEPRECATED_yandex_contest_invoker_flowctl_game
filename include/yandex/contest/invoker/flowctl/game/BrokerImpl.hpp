@@ -106,6 +106,9 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 
         void communicate(const SolutionId id);
 
+        void freeze(const SolutionId id);
+        void unfreeze(const SolutionId id);
+
     private:
         const ResourceLimits defaultResourceLimits_;
         const TokenizerArgument defaultTokenizerArgument;

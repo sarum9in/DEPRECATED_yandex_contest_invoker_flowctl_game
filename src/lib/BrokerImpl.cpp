@@ -8,6 +8,8 @@
 
 #include "yandex/contest/system/unistd/Operations.hpp"
 
+#include <boost/scope_exit.hpp>
+
 #include <fcntl.h>
 #include <dlfcn.h>
 
@@ -38,6 +40,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
     {
         for (std::size_t i = 0; i < solutions_.size(); ++i)
         {
+            freeze(i);
             setnonblock(solutions_[i].process.in);
             setnonblock(solutions_[i].process.out);
             solutions_[i].resourceLimits = defaultResourceLimits_;
@@ -103,7 +106,14 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         BOOST_ASSERT_MSG(!sol.terminated, "Solution was already terminated!");
         BOOST_ASSERT_MSG(sol.tokenizer, "Begin was not called!");
         if (sol.tokenizerStatus == Tokenizer::Status::CONTINUE)
+        {
+            BOOST_SCOPE_EXIT_ALL(this, id)
+            {
+                freeze(id);
+            };
+            unfreeze(id);
             communicate(id);
+        }
         if (discardRemaining)
             sol.inbuf.clear();
         Result result;
@@ -145,5 +155,19 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         Solution &sol = solutions_[id];
         BOOST_ASSERT_MSG(!sol.terminated, "Was already terminated!");
         return sol;
+    }
+
+    void BrokerImpl::freeze(const SolutionId id)
+    {
+        BOOST_ASSERT(id < solutions_.size());
+        Solution &sol = solutions_[id];
+        BOOST_ASSERT(killer_->freeze(sol.process.id) == Killer::Status::OK);
+    }
+
+    void BrokerImpl::unfreeze(const SolutionId id)
+    {
+        BOOST_ASSERT(id < solutions_.size());
+        Solution &sol = solutions_[id];
+        BOOST_ASSERT(killer_->freeze(sol.process.id) == Killer::Status::OK);
     }
 }}}}}
