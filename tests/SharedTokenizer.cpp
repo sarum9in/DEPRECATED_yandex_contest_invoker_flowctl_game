@@ -18,9 +18,9 @@ struct SharedTokenizerFixture
     {
     }
 
-    void check(const std::unique_ptr<ya::Tokenizer> &tok,
-               const std::string &msg,
-               const ya::Tokenizer::Status status, const std::size_t accepted=0)
+    void check(const std::string &msg,
+               const ya::Tokenizer::Status status,
+               const std::size_t accepted=0)
     {
         BOOST_REQUIRE(tok);
         const ya::Tokenizer::Result result = (*tok)(msg);
@@ -29,50 +29,48 @@ struct SharedTokenizerFixture
             BOOST_CHECK_EQUAL(result.accepted, accepted);
     }
 
-    void checkContinue(const std::unique_ptr<ya::Tokenizer> &tok,
-                       const std::string &msg)
+    void checkContinue(const std::string &msg)
     {
-        check(tok, msg, ya::Tokenizer::Status::CONTINUE);
+        check(msg, ya::Tokenizer::Status::CONTINUE);
     }
 
-    void checkAccepted(const std::unique_ptr<ya::Tokenizer> &tok,
-                       const std::string &msg, const std::size_t size)
+    void checkAccepted(const std::string &msg, const std::size_t size)
     {
-        check(tok, msg, ya::Tokenizer::Status::ACCEPTED, size);
+        check(msg, ya::Tokenizer::Status::ACCEPTED, size);
     }
 
     unistd::DynamicLibrary split, splitChar;
     ya::SharedTokenizerFactory splitFactory, splitCharFactory;
-    std::unique_ptr<ya::Tokenizer> splitTok, splitCharTok;
+    std::unique_ptr<ya::Tokenizer> tok;
 };
 
 BOOST_FIXTURE_TEST_SUITE(SharedTokenizer, SharedTokenizerFixture)
 
 BOOST_AUTO_TEST_CASE(split_char)
 {
-    splitCharTok = splitFactory.instance("\n");
-    checkContinue(splitCharTok, "123");
-    checkAccepted(splitCharTok, "12\n45", 3);
+    tok = splitFactory.instance("\n");
+    checkContinue("123");
+    checkAccepted("12\n45", 3);
 }
 
 BOOST_AUTO_TEST_SUITE(split)
 
 BOOST_AUTO_TEST_CASE(simple)
 {
-    splitTok = splitFactory.instance("\n\n");
+    tok = splitFactory.instance("\n\n");
     BOOST_TEST_CHECKPOINT("1");
-    checkContinue(splitTok, "123");
+    checkContinue("123");
     BOOST_TEST_CHECKPOINT("2");
-    checkContinue(splitTok, "123");
+    checkContinue("123");
     BOOST_TEST_CHECKPOINT("3");
-    checkAccepted(splitTok, "123\n\n", 5);
+    checkAccepted("123\n\n", 5);
 }
 
 BOOST_AUTO_TEST_CASE(parted)
 {
-    splitTok = splitFactory.instance("\n\n");
-    checkContinue(splitTok, "123\n");
-    checkAccepted(splitTok, "\n23", 1);
+    tok = splitFactory.instance("\n\n");
+    checkContinue("123\n");
+    checkAccepted("\n23", 1);
 }
 
 BOOST_AUTO_TEST_SUITE_END() // split
