@@ -50,19 +50,22 @@ add_library(${PROJECT_NAME} SHARED
 )
 target_link_libraries(${PROJECT_NAME} ${libraries})
 
-add_library(${PROJECT_NAME}_tokenizer_split_char SHARED
-    src/tokenizers/split_char.c
-)
+set(tokenizers)
 
-add_library(${PROJECT_NAME}_tokenizer_split SHARED
-    src/tokenizers/split.c
-)
+macro(add_tokenizer target src)
+    add_library(${target} SHARED ${src})
+    list(APPEND tokenizers ${target})
+endmacro()
+
+add_tokenizer(${PROJECT_NAME}_tokenizer_split_char src/tokenizers/split_char.c)
+
+add_tokenizer(${PROJECT_NAME}_tokenizer_split src/tokenizers/split.c)
 
 add_binary_targets(bin_targets killer broker)
 
 # Installation
 install(DIRECTORY include DESTINATION .)
-install(TARGETS ${PROJECT_NAME} ${bin_targets}
+install(TARGETS ${PROJECT_NAME} ${bin_targets} ${tokenizers}
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib)
