@@ -164,9 +164,9 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             template <typename T>
             void save(const std::vector<T> &v)
             {
-                last_ = true;
                 for (const T &obj: v)
-                    save(obj);
+                    (*this) << obj;
+                last_ = true;
             }
 
         private:
@@ -247,7 +247,6 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             template <typename T>
             void load(std::vector<T> &v)
             {
-                last_ = true;
                 v.clear();
                 while (!end_)
                 {
@@ -255,6 +254,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                     (*this) >> obj;
                     v.push_back(std::move(obj));
                 }
+                last_ = true;
             }
 
         private:

@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 
+#include "yandex/contest/StreamEnum.hpp"
+
 #include <cstdlib>
 
 #include <boost/noncopyable.hpp>
@@ -15,12 +17,12 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
     class Tokenizer: private boost::noncopyable
     {
     public:
-        enum class Status
-        {
-            FAIL = -1,      ///< An error has occurred.
-            CONTINUE = 0,   ///< There is no enough symbols, need more.
-            ACCEPTED = 1    ///< Token was completed. \see Result::accepted.
-        };
+        YANDEX_CONTEST_INCLASS_STREAM_ENUM_CLASS(Status,
+        (
+            FAIL,       ///< An error has occurred.
+            CONTINUE,   ///< There is no enough symbols, need more.
+            ACCEPTED    ///< Token was completed. \see Result::accepted.
+        ))
 
         struct Result
         {
