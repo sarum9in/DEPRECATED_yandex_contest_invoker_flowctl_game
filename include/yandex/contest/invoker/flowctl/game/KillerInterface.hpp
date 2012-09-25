@@ -48,6 +48,6 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         virtual Status recvStatus()=0;
 
     private:
-        static Status run(Killer &killer, const Command &command);
+        void run(Killer &killer, const Command &command);
     };
 }}}}}
