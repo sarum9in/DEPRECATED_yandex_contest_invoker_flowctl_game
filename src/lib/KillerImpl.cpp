@@ -1,5 +1,7 @@
 #include "yandex/contest/invoker/flowctl/game/KillerImpl.hpp"
 
+#include "yandex/contest/detail/LogHelper.hpp"
+
 #include "yandex/contest/system/unistd/Operations.hpp"
 
 #include "yandex/contest/system/cgroup/Freezer.hpp"
@@ -22,8 +24,16 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         const ControlGroupId cid = rawIdToCgroup(id); \
         if (unprotected_.find(cid) == unprotected_.end()) \
             return Status::PROTECTED; \
-        system::cgroup::ControlGroup cg(parentControlGroup_.attachChild(cid)); \
-        ACT; \
+        try \
+        { \
+            system::cgroup::ControlGroup cg(parentControlGroup_.attachChild(cid)); \
+            ACT; \
+        } \
+        catch (std::exception &e) \
+        { \
+            STREAM_TRACE << "Error: " << e.what() << "."; \
+            return Status::ERROR; \
+        } \
         return Status::OK; \
     }
 

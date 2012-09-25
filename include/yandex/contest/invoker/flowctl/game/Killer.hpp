@@ -18,7 +18,8 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         YANDEX_CONTEST_INCLASS_STREAM_ENUM_CLASS(Status,
         (
             OK,
-            PROTECTED
+            PROTECTED,
+            ERROR
         ))
 
     public:
