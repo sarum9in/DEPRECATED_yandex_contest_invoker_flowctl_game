@@ -41,6 +41,17 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             {
                 if (events[i].data.fd == sol.process.in)
                 {
+                    STREAM_TRACE << "Event at write end of pipe (fd = " << sol.process.in << ")...";
+                    if ((events[i].events & EPOLLERR) || (events[i].events & EPOLLHUP))
+                    {
+                        if (events[i].events & EPOLLERR)
+                            STREAM_TRACE << "Error at " << sol.process.in << ".";
+                        if (events[i].events & EPOLLHUP)
+                            STREAM_TRACE << "Hup at " << sol.process.in << ".";
+                        STREAM_TRACE << "Deleting " << sol.process.in << " from epoll.";
+                        system::unistd::epoll_ctl_del(epfd.get(), sol.process.in);
+                        continue;
+                    }
                     BOOST_ASSERT_MSG(events[i].events & EPOLLOUT, "Unexpected event.");
                     STREAM_TRACE << "May write into " << sol.process.in << ".";
                     if (sol.tokenizerStatus != Tokenizer::Status::CONTINUE)
@@ -55,6 +66,8 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                     {
                         const std::size_t bsize = std::min(BUFSIZE, sol.inbuf.size());
                         std::copy_n(sol.inbuf.begin(), bsize, buf);
+                        STREAM_TRACE << "Attempt to write " << bsize <<
+                                        " bytes into " << sol.process.in << ".";
                         const ssize_t size = write(sol.process.in, buf, bsize);
                         if (size < 0)
                         {
@@ -82,6 +95,8 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                 }
                 else if (events[i].data.fd == sol.process.out)
                 {
+                    STREAM_TRACE << "Event at read end of pipe (fd = " << sol.process.out << ")...";
+                    // Even if error occurred, we can read available data.
                     if (!(events[i].events & EPOLLIN))
                     {
                         if (events[i].events & EPOLLERR)
