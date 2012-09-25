@@ -82,11 +82,11 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                 }
                 else if (events[i].data.fd == sol.process.out)
                 {
-                    if (events[i].events & (EPOLLERR | EPOLLHUP))
+                    if (!(events[i].events & EPOLLIN))
                     {
                         if (events[i].events & EPOLLERR)
                             STREAM_TRACE << "Error at " << sol.process.out << ".";
-                        else if (events[i].events & EPOLLHUP)
+                        if (events[i].events & EPOLLHUP)
                             STREAM_TRACE << "Hup at " << sol.process.out << ".";
                         STREAM_TRACE << "EOF at " << sol.process.out << ".";
                         return;
