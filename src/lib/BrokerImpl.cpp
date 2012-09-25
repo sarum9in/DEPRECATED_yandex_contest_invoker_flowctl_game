@@ -107,10 +107,16 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         Solution &sol = solution(id);
         BOOST_ASSERT_MSG(!sol.terminated, "Solution was already terminated!");
         BOOST_ASSERT_MSG(sol.tokenizer, "Begin was not called!");
+        BOOST_SCOPE_EXIT_ALL(this, id)
+        {
+            solution(id).tokenizer.reset();
+        };
         if (sol.tokenizerStatus == Tokenizer::Status::CONTINUE)
         {
             BOOST_SCOPE_EXIT_ALL(this, id)
             {
+                // on error we have nothing to do but terminate
+                // no try/catch needed
                 freeze(id);
             };
             unfreeze(id);
