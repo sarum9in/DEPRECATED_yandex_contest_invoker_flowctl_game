@@ -7,6 +7,7 @@
 #include "yandex/contest/system/unistd/Operations.hpp"
 
 #include <algorithm>
+#include <chrono>
 
 #include <cerrno>
 
@@ -16,11 +17,16 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 {
     namespace unistd = system::unistd;
 
+    typedef std::chrono::system_clock Clock;
+    typedef Clock::duration Duration;
+    typedef Clock::time_point TimePoint;
+
     BrokerImpl::Result::Status BrokerImpl::communicate(const SolutionId id)
     {
         STREAM_TRACE << "id = " << id << ".";
         Solution &sol = solution(id);
         BOOST_ASSERT_MSG(sol.tokenizer, "Begin was not called!");
+        const TimePoint untilPoint = Clock::now() + sol.resourceLimits.realTimeLimit;
         const unistd::Descriptor epfd = unistd::epoll_create1();
         constexpr std::size_t MAXEVENTS = 2;
         struct epoll_event ev, events[MAXEVENTS];
@@ -35,7 +41,17 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         {
             STREAM_TRACE << "Waiting for event(s)...";
             // TODO the last argument may be used in RTL control
-            const std::size_t nfds = unistd::epoll_wait(epfd.get(), events);
+            std::size_t nfds = 0;
+            TimePoint now = Clock::now();
+            while (!nfds && now < untilPoint)
+            {
+                // FIXME hardcode here
+                nfds = unistd::epoll_wait(epfd.get(), events, std::chrono::milliseconds(100));
+                now = Clock::now();
+            }
+            // If event has occurred we do not treat it as RTLE.
+            if (!nfds && now >= untilPoint)
+                return Result::Status::REAL_TIME_LIMIT_EXCEEDED;
             STREAM_TRACE << "Found " << nfds << " events.";
             for (std::size_t i = 0; i < nfds; ++i)
             {
