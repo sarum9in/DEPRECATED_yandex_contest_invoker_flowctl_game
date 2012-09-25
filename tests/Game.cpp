@@ -11,6 +11,8 @@
 
 #include "yandex/contest/invoker/flowctl/game/Configurator.hpp"
 
+#include <functional>
+
 #include <boost/filesystem/operations.hpp>
 
 namespace ya = yandex::contest::invoker;
@@ -78,7 +80,7 @@ struct GameFixture: ContainerFixture
         return pp;
     }
 
-    void run()
+    void run_(const std::function<void (const std::size_t)> &checkSolution)
     {
         cfg.configure("/brokerConfig", "/killerConfig");
         pgr = pg->synchronizedCall();
@@ -88,11 +90,21 @@ struct GameFixture: ContainerFixture
         for (std::size_t i = 0; i < cfg.solutions.size(); ++i)
         {
             BOOST_TEST_MESSAGE("Solution [" << i << "]:");
-            infoP(i + 3);
+            checkSolution(i + 3);
         }
         BOOST_TEST_MESSAGE("Broker: <<<\n" << readData(brokerLog) << "\n>>> Broker");
         BOOST_TEST_MESSAGE("Killer: <<<\n" << readData(killerLog) << "\n>>> Killer");
         BOOST_TEST_MESSAGE("Judge: <<<\n" << readData(judgeLog) << "\n>>> Judge");
+    }
+
+    void runInfo()
+    {
+        run_([this](const std::size_t i){ infoP(i); });
+    }
+
+    void runOK()
+    {
+        run_([this](const std::size_t i){ verifyP(i); });
     }
 
     yag::Configurator cfg;
@@ -106,7 +118,7 @@ BOOST_FIXTURE_TEST_SUITE(Game, GameFixture)
 BOOST_AUTO_TEST_CASE(empty)
 {
     setJudge(testsResourcesSourceDir / "killer_judge.py");
-    run();
+    runInfo();
 }
 
 BOOST_AUTO_TEST_CASE(kill_all)
@@ -115,14 +127,21 @@ BOOST_AUTO_TEST_CASE(kill_all)
     addSolution(3, "sleep", "5");
     addSolution(4, "sleep", "5");
     addSolution(5, "sleep", "5");
-    run();
+    runInfo();
 }
 
 BOOST_AUTO_TEST_CASE(echo)
 {
     setJudge(testsResourcesSourceDir / "echo_judge.py");
     addSolutionCopy(3, testsResourcesSourceDir / "echo_solution.py");
-    run();
+    runInfo();
+}
+
+BOOST_AUTO_TEST_CASE(echo_ok)
+{
+    setJudge(testsResourcesSourceDir / "echo_ok_judge.py");
+    addSolutionCopy(3, testsResourcesSourceDir / "echo_solution.py");
+    runOK();
 }
 
 BOOST_AUTO_TEST_SUITE_END()
