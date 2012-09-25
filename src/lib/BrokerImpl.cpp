@@ -161,6 +161,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 
     void BrokerImpl::freeze(const SolutionId id)
     {
+        STREAM_TRACE << "Attempt to freeze id = " << id << ".";
         BOOST_ASSERT(id < solutions_.size());
         Solution &sol = solutions_[id];
         BOOST_ASSERT(killer_->freeze(sol.process.id) == Killer::Status::OK);
@@ -168,8 +169,9 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 
     void BrokerImpl::unfreeze(const SolutionId id)
     {
+        STREAM_TRACE << "Attempt to unfreeze id = " << id << ".";
         BOOST_ASSERT(id < solutions_.size());
         Solution &sol = solutions_[id];
-        BOOST_ASSERT(killer_->freeze(sol.process.id) == Killer::Status::OK);
+        BOOST_ASSERT(killer_->unfreeze(sol.process.id) == Killer::Status::OK);
     }
 }}}}}
