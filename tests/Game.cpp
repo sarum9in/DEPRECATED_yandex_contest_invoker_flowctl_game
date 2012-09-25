@@ -83,10 +83,13 @@ struct GameFixture: ContainerFixture
         cfg.configure("/brokerConfig", "/killerConfig");
         pgr = pg->synchronizedCall();
         verifyPG(PGR::CompletionStatus::OK);
-        for (std::size_t i = 0; i <= 2; ++i)
+        for (std::size_t i = 0; i < 3; ++i)
             verifyP(i, PR::CompletionStatus::OK);
         for (std::size_t i = 0; i < cfg.solutions.size(); ++i)
+        {
+            BOOST_TEST_MESSAGE("Solution [" << i << "]:");
             infoP(i + 3);
+        }
         BOOST_TEST_MESSAGE("Broker: <<<\n" << readData(brokerLog) << "\n>>> Broker");
         BOOST_TEST_MESSAGE("Killer: <<<\n" << readData(killerLog) << "\n>>> Killer");
         BOOST_TEST_MESSAGE("Judge: <<<\n" << readData(judgeLog) << "\n>>> Judge");
