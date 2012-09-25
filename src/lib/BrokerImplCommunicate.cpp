@@ -20,7 +20,6 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
     {
         STREAM_TRACE << "id = " << id << ".";
         Solution &sol = solution(id);
-        BOOST_ASSERT_MSG(!sol.terminated, "Solution was already terminated!");
         BOOST_ASSERT_MSG(sol.tokenizer, "Begin was not called!");
         const unistd::Descriptor epfd = unistd::epoll_create1();
         constexpr std::size_t MAXEVENTS = 2;

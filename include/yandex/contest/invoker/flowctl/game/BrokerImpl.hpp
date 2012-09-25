@@ -98,7 +98,6 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             std::string result;
             std::deque<char> inbuf, outbuf;
             ResourceLimits resourceLimits;
-            bool terminated = false;
         };
 
     private:
@@ -106,8 +105,8 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 
         void communicate(const SolutionId id);
 
-        void freeze(const SolutionId id);
-        void unfreeze(const SolutionId id);
+        Killer::Status freeze(const SolutionId id);
+        Killer::Status unfreeze(const SolutionId id);
 
     private:
         const ResourceLimits defaultResourceLimits_;

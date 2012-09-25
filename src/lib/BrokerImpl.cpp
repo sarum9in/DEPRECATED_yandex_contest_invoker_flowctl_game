@@ -63,7 +63,6 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                            const ResourceLimits &resourceLimits)
     {
         Solution &sol = solution(id);
-        BOOST_ASSERT_MSG(!sol.terminated, "Solution was already terminated!");
         BOOST_ASSERT_MSG(!sol.tokenizer, "Begin was already called!");
         sol.tokenizer = sharedTokenizerFactory_.instance(tokenizerArgument);
         sol.tokenizerStatus = Tokenizer::Status::CONTINUE;
@@ -96,7 +95,6 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
     void BrokerImpl::send(const SolutionId id, const std::string &msg)
     {
         Solution &sol = solution(id);
-        BOOST_ASSERT_MSG(!sol.terminated, "Solution was already terminated!");
         BOOST_ASSERT_MSG(sol.tokenizer, "Begin was not called!");
         sol.inbuf.insert(sol.inbuf.end(), msg.begin(), msg.end());
     }
@@ -105,7 +103,6 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
     {
         STREAM_TRACE << "id = " << id << ", discardRemaining = " << discardRemaining << ".";
         Solution &sol = solution(id);
-        BOOST_ASSERT_MSG(!sol.terminated, "Solution was already terminated!");
         BOOST_ASSERT_MSG(sol.tokenizer, "Begin was not called!");
         BOOST_SCOPE_EXIT_ALL(this, id)
         {
@@ -113,14 +110,12 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         };
         if (sol.tokenizerStatus == Tokenizer::Status::CONTINUE)
         {
-            BOOST_SCOPE_EXIT_ALL(this, id)
-            {
-                // on error we have nothing to do but terminate
-                // no try/catch needed
-                freeze(id);
-            };
-            unfreeze(id);
+            // Even if process has already terminated
+            // some data may be available
+            // from previous iterations.
+            (void) unfreeze(id);
             communicate(id);
+            (void) freeze(id);
         }
         if (discardRemaining)
             sol.inbuf.clear();
@@ -146,38 +141,34 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 
     void BrokerImpl::terminate(const SolutionId id)
     {
-        if (!solutions_[id].terminated)
-        {
-            if (killer_->terminate(solutions_[id].process.id) != Killer::Status::OK)
-                STREAM_ERROR << "Unable to terminate solution id = " << id << ".";
-            solutions_[id].terminated = true;
-            solutions_[id].tokenizer.reset();
-            solutions_[id].inbuf.clear();
-            solutions_[id].outbuf.clear();
-        }
+        Solution &sol = solution(id);
+        if (killer_->terminate(sol.process.id) != Killer::Status::OK)
+            STREAM_ERROR << "Unable to terminate solution id = " << id << ".";
+        sol.tokenizer.reset();
+        sol.inbuf.clear();
+        sol.outbuf.clear();
     }
 
     BrokerImpl::Solution &BrokerImpl::solution(const SolutionId id)
     {
         BOOST_ASSERT(id < solutions_.size());
         Solution &sol = solutions_[id];
-        BOOST_ASSERT_MSG(!sol.terminated, "Was already terminated!");
         return sol;
     }
 
-    void BrokerImpl::freeze(const SolutionId id)
+    Killer::Status BrokerImpl::freeze(const SolutionId id)
     {
         STREAM_TRACE << "Attempt to freeze id = " << id << ".";
-        BOOST_ASSERT(id < solutions_.size());
-        Solution &sol = solutions_[id];
-        BOOST_ASSERT(killer_->freeze(sol.process.id) == Killer::Status::OK);
+        const Killer::Status status = killer_->freeze(solution(id).process.id);
+        BOOST_ASSERT_MSG(status != Killer::Status::PROTECTED, "Invalid configuration.");
+        return status;
     }
 
-    void BrokerImpl::unfreeze(const SolutionId id)
+    Killer::Status BrokerImpl::unfreeze(const SolutionId id)
     {
         STREAM_TRACE << "Attempt to unfreeze id = " << id << ".";
-        BOOST_ASSERT(id < solutions_.size());
-        Solution &sol = solutions_[id];
-        BOOST_ASSERT(killer_->unfreeze(sol.process.id) == Killer::Status::OK);
+        const Killer::Status status = killer_->unfreeze(solution(id).process.id);
+        BOOST_ASSERT_MSG(status != Killer::Status::PROTECTED, "Invalid configuration.");
+        return status;
     }
 }}}}}
