@@ -18,5 +18,4 @@ if __name__ == '__main__':
     for i in range(solutions):
         begin(i, '\n')
         send(i, 'EXIT\n')
-        result = end(i)
-        assert result.status == 'EOF_ERROR'
+        assert end(i).status == 'EOF_ERROR'
