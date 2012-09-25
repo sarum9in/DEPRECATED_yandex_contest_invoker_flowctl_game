@@ -21,9 +21,13 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 #define YANDEX_FLOWCTL_KILLER(FUNCTION, ACT) \
     KillerImpl::Status KillerImpl::FUNCTION(const Id &id) \
     { \
+        STREAM_TRACE << "Attempt to " << __func__ << " id = " << id << "."; \
         const ControlGroupId cid = rawIdToCgroup(id); \
         if (unprotected_.find(cid) == unprotected_.end()) \
+        { \
+            STREAM_TRACE << "id = " << id << ", status = PROTECTED."; \
             return Status::PROTECTED; \
+        } \
         try \
         { \
             system::cgroup::ControlGroup cg(parentControlGroup_.attachChild(cid)); \
@@ -34,6 +38,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             STREAM_TRACE << "Error: " << e.what() << "."; \
             return Status::ERROR; \
         } \
+        STREAM_TRACE << "id = " << id << ", status = OK."; \
         return Status::OK; \
     }
 
