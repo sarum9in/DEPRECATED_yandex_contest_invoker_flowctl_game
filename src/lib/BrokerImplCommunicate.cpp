@@ -42,6 +42,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             {
                 if (events[i].data.fd == sol.process.in)
                 {
+                    BOOST_ASSERT_MSG(events[i].events & EPOLLOUT, "Unexpected event.");
                     STREAM_TRACE << "May write into " << sol.process.in << ".";
                     if (sol.tokenizerStatus != Tokenizer::Status::CONTINUE)
                     {
@@ -74,26 +75,51 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                                         sol.process.in << ".";
                         sol.inbuf.erase(sol.inbuf.begin(), sol.inbuf.begin() + size);
                     }
+                    if (sol.inbuf.empty())
+                    {
+                        STREAM_TRACE << "inbuf is empty (fd = " << sol.process.in << "), deleting.";
+                        system::unistd::epoll_ctl_del(epfd.get(), sol.process.in);
+                    }
                 }
                 else if (events[i].data.fd == sol.process.out)
                 {
+                    if (events[i].events & (EPOLLERR | EPOLLHUP))
+                    {
+                        if (events[i].events & EPOLLERR)
+                            STREAM_TRACE << "Error at " << sol.process.out << ".";
+                        else if (events[i].events & EPOLLHUP)
+                            STREAM_TRACE << "Hup at " << sol.process.out << ".";
+                        STREAM_TRACE << "EOF at " << sol.process.out << ".";
+                        return;
+                    }
+                    BOOST_ASSERT_MSG(events[i].events & EPOLLIN, "Unexpected event.");
                     STREAM_TRACE << "May read from " << sol.process.out << ".";
                     constexpr std::size_t BUFSIZE = 1024;
                     char buf[BUFSIZE];
                     ssize_t size;
+                    STREAM_TRACE << "Starting read loop (fd = " << sol.process.out << ").";
                     while (sol.tokenizerStatus == Tokenizer::Status::CONTINUE &&
                            (size = read(sol.process.out, buf, BUFSIZE)))
                     {
                         if (size < 0)
                         {
                             if (errno == EAGAIN)
+                            {
+                                STREAM_TRACE << "Unable to read more from " <<
+                                                sol.process.out << ".";
                                 break;
+                            }
                             else
+                            {
                                 BOOST_THROW_EXCEPTION(SystemError("read") <<
                                                       unistd::info::fd(sol.process.out));
+                            }
                         }
+                        STREAM_TRACE << "Read " << size << " bytes from " <<
+                                        sol.process.out << ".";
                         const Tokenizer::Result result = (*sol.tokenizer)(buf, size);
                         sol.tokenizerStatus = result.status;
+                        STREAM_TRACE << "Tokenizer::Status = " << result.status << ".";
                         switch (result.status)
                         {
                         case Tokenizer::Status::FAIL:
