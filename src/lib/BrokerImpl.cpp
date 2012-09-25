@@ -108,18 +108,20 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         {
             solution(id).tokenizer.reset();
         };
+        Result result;
         if (sol.tokenizerStatus == Tokenizer::Status::CONTINUE)
         {
             // Even if process has already terminated
             // some data may be available
             // from previous iterations.
             (void) unfreeze(id);
-            communicate(id);
+            result.status = communicate(id);
             (void) freeze(id);
         }
         if (discardRemaining)
             sol.inbuf.clear();
-        Result result;
+        if (result.status != Result::Status::OK)
+            return result;
         switch (sol.tokenizerStatus)
         {
         case Tokenizer::Status::FAIL:
@@ -135,7 +137,6 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             result.data = sol.result;
             break;
         }
-        // FIXME check resource usage
         return result;
     }
 

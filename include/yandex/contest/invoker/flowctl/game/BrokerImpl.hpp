@@ -103,7 +103,8 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
     private:
         Solution &solution(const SolutionId id);
 
-        void communicate(const SolutionId id);
+        /// \return resourceLimits-related statuses or OK.
+        Result::Status communicate(const SolutionId id);
 
         Killer::Status freeze(const SolutionId id);
         Killer::Status unfreeze(const SolutionId id);

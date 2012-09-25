@@ -16,7 +16,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 {
     namespace unistd = system::unistd;
 
-    void BrokerImpl::communicate(const SolutionId id)
+    BrokerImpl::Result::Status BrokerImpl::communicate(const SolutionId id)
     {
         STREAM_TRACE << "id = " << id << ".";
         Solution &sol = solution(id);
@@ -104,7 +104,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                         if (events[i].events & EPOLLHUP)
                             STREAM_TRACE << "Hup at " << sol.process.out << ".";
                         STREAM_TRACE << "EOF at " << sol.process.out << ".";
-                        return;
+                        return Result::Status::OK;
                     }
                     BOOST_ASSERT_MSG(events[i].events & EPOLLIN, "Unexpected event.");
                     STREAM_TRACE << "May read from " << sol.process.out << ".";
@@ -151,5 +151,6 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                 }
             }
         }
+        return Result::Status::OK;
     }
 }}}}}
