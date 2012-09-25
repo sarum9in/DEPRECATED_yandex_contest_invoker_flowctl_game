@@ -39,8 +39,10 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                 timeLimit(timeLimit_),
                 realTimeLimit(realTimeLimit_) {}
 
-            std::chrono::milliseconds timeLimit = std::chrono::milliseconds::max();
-            std::chrono::milliseconds realTimeLimit = std::chrono::milliseconds::max();
+            // note: specifying max() value will cause overflow
+            // so practically infinite values are specified
+            std::chrono::milliseconds timeLimit = std::chrono::hours(1);
+            std::chrono::milliseconds realTimeLimit = std::chrono::hours(1);
         };
 
         struct Result
