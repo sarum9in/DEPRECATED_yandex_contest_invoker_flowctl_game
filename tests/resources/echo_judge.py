@@ -8,7 +8,9 @@ if __name__ == '__main__':
     solutions = int(sys.argv[1])
     for i in range(solutions):
         begin(i, '\n')
-        send(i, 'hello,')
+        send(i, 'Hello,')
         send(i, ' ')
         send(i, 'world!\n')
-        assert end(i).status == 'OK'
+        result = end(i)
+        assert result.status == 'OK'
+        assert result.data == 'Hello, world!\n'
