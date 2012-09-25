@@ -158,4 +158,11 @@ BOOST_AUTO_TEST_CASE(echo_no_reply_exit)
     runOK();
 }
 
+BOOST_AUTO_TEST_CASE(echo_eof_after_terminate)
+{
+    setJudge(testsResourcesSourceDir / "echo_terminate_judge.py");
+    addSolutionCopy(3, testsResourcesSourceDir / "echo_loop_no_reply_solution.py");
+    runOK();
+}
+
 BOOST_AUTO_TEST_SUITE_END()
