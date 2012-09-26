@@ -121,7 +121,11 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         if (discardRemaining)
             sol.inbuf.clear();
         if (result.status != Result::Status::OK)
+        {
+            // resource limit exceeded
+            terminate(id);
             return result;
+        }
         switch (sol.tokenizerStatus)
         {
         case Tokenizer::Status::FAIL:
