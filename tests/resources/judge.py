@@ -7,6 +7,8 @@ import traceback
 
 
 def _escape(obj):
+    if hasattr(obj, '__escape__'):
+        return " ".join(obj.__escape__())
     obj = str(obj)
     buf = []
     transform = {' ': '\\ ', '\n': '\\n', '\\': '\\\\'}
@@ -51,12 +53,13 @@ class ResourceLimits(object):
 
     __slots__ = ('time_limit_millis', 'real_time_limit_millis')
 
-    def __init__(self, time_limit_millis, real_time_limit_millis):
+    def __init__(self, time_limit_millis=(60 * 60 * 1000), real_time_limit_millis=(60 * 60 * 1000)):
         self.time_limit_millis = time_limit_millis
         self.real_time_limit_millis = real_time_limit_millis
 
-    def __str__(self):
-        return '{} {}'.format(self.time_limit_millis, self.real_time_limit_millis)
+    def __escape__(self):
+        for i in (self.time_limit_millis, self.real_time_limit_millis):
+            yield _escape(i)
 
     def __repr__(self):
         return 'ResourceLimits(time_limit_millis={}, real_time_limit_millis={})'.format(
@@ -120,7 +123,7 @@ def begin(id, *args):
 
 
 def send(id, msg):
-    log("Send", [id, msg])
+    log("Send", [id, "[{1}]{0}".format(msg, len(msg))])
     print("SEND", id, _escape(msg))
     sys.stdout.flush()
 
