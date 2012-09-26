@@ -165,4 +165,15 @@ BOOST_AUTO_TEST_CASE(echo_eof_after_terminate)
     runOK();
 }
 
+BOOST_AUTO_TEST_SUITE(resource_limits)
+
+BOOST_AUTO_TEST_CASE(real_time_limit)
+{
+    setJudge(testsResourcesSourceDir / "sleep_rtl_judge.py");
+    addSolutionCopy(3, testsResourcesSourceDir / "sleep_solution.py");
+    runInfo();
+}
+
+BOOST_AUTO_TEST_SUITE_END() // resource_limits
+
 BOOST_AUTO_TEST_SUITE_END()
