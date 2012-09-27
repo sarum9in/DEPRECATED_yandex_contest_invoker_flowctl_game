@@ -12,6 +12,8 @@
 #include <limits>
 #include <memory>
 
+#include <boost/serialization/access.hpp>
+#include <boost/serialization/nvp.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/assert.hpp>
 
@@ -19,6 +21,19 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 {
     struct Configurator
     {
+        template <typename Archive>
+        void serialize(Archive &ar, const unsigned int)
+        {
+            /// \note pointer serialization is not supported
+            ar & BOOST_SERIALIZATION_NVP(protocol);
+            ar & BOOST_SERIALIZATION_NVP(killerLog);
+            ar & BOOST_SERIALIZATION_NVP(judgeLog);
+            ar & BOOST_SERIALIZATION_NVP(brokerLog);
+            ar & BOOST_SERIALIZATION_NVP(tokenizer);
+            ar & BOOST_SERIALIZATION_NVP(defaultResourceLimits);
+            ar & BOOST_SERIALIZATION_NVP(defaultTokenizerArgument);
+        }
+
         ContainerPointer container;
         ProcessGroupPointer processGroup;
         ProcessPointer broker, killer, judge;
