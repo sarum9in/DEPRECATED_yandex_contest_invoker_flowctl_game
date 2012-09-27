@@ -28,20 +28,20 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
             template <typename Archive>
             void serialize(Archive &ar, const unsigned int)
             {
-                ar & boost::serialization::make_nvp("timeLimitMillis", timeLimit);
+                ar & boost::serialization::make_nvp("userTimeLimitMillis", userTimeLimit);
                 ar & boost::serialization::make_nvp("realTimeLimitMillis", realTimeLimit);
             }
 
             ResourceLimits()=default;
 
-            ResourceLimits(const std::chrono::milliseconds timeLimit_,
+            ResourceLimits(const std::chrono::milliseconds userTimeLimit_,
                            const std::chrono::milliseconds realTimeLimit_):
-                timeLimit(timeLimit_),
+                userTimeLimit(userTimeLimit_),
                 realTimeLimit(realTimeLimit_) {}
 
             // note: specifying max() value will cause overflow
             // so practically infinite values are specified
-            std::chrono::milliseconds timeLimit = std::chrono::hours(1);
+            std::chrono::milliseconds userTimeLimit = std::chrono::hours(1);
             std::chrono::milliseconds realTimeLimit = std::chrono::hours(1);
         };
 

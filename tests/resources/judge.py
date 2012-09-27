@@ -51,19 +51,19 @@ def _split(line):
 
 class ResourceLimits(object):
 
-    __slots__ = ('time_limit_millis', 'real_time_limit_millis')
+    __slots__ = ('user_time_limit_millis', 'real_time_limit_millis')
 
-    def __init__(self, time_limit_millis=(60 * 60 * 1000), real_time_limit_millis=(60 * 60 * 1000)):
-        self.time_limit_millis = time_limit_millis
+    def __init__(self, user_time_limit_millis=(60 * 60 * 1000), real_time_limit_millis=(60 * 60 * 1000)):
+        self.user_time_limit_millis = user_time_limit_millis
         self.real_time_limit_millis = real_time_limit_millis
 
     def __escape__(self):
-        for i in (self.time_limit_millis, self.real_time_limit_millis):
+        for i in (self.user_time_limit_millis, self.real_time_limit_millis):
             yield _escape(i)
 
     def __repr__(self):
-        return 'ResourceLimits(time_limit_millis={}, real_time_limit_millis={})'.format(
-            self.time_limit_millis, self.real_time_limit_millis)
+        return 'ResourceLimits(user_time_limit_millis={}, real_time_limit_millis={})'.format(
+            self.user_time_limit_millis, self.real_time_limit_millis)
 
 
 class Result(object):

@@ -18,7 +18,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                                 const ResourceLimits &resourceLimits)
     {
         send(Command(Command::BEGIN, id, tokenizerArgument,
-                     resourceLimits.timeLimit.count(), resourceLimits.realTimeLimit.count()));
+                     resourceLimits.userTimeLimit.count(), resourceLimits.realTimeLimit.count()));
     }
 
     void BrokerInterface::begin(const SolutionId id,
