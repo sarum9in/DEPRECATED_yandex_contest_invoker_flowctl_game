@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <chrono>
 
+#include <cstdio>
 #include <cerrno>
 
 #include <sys/epoll.h>
@@ -75,12 +76,11 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                         STREAM_TRACE << "Nothing to write into " << sol.process.in << ".";
                         continue; // TODO may be break?
                     }
-                    constexpr std::size_t BUFSIZE = 1024;
-                    char buf[BUFSIZE];
+                    char buf[BUFSIZ];
                     STREAM_TRACE << "Starting write loop (fd = " << sol.process.in << ").";
                     while (!sol.inbuf.empty())
                     {
-                        const std::size_t bsize = std::min(BUFSIZE, sol.inbuf.size());
+                        const std::size_t bsize = std::min((size_t)BUFSIZ, sol.inbuf.size());
                         std::copy_n(sol.inbuf.begin(), bsize, buf);
                         STREAM_TRACE << "Attempt to write " << bsize <<
                                         " bytes into " << sol.process.in << ".";
@@ -124,12 +124,11 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                     }
                     BOOST_ASSERT_MSG(events[i].events & EPOLLIN, "Unexpected event.");
                     STREAM_TRACE << "May read from " << sol.process.out << ".";
-                    constexpr std::size_t BUFSIZE = 1024;
-                    char buf[BUFSIZE];
+                    char buf[BUFSIZ];
                     ssize_t size;
                     STREAM_TRACE << "Starting read loop (fd = " << sol.process.out << ").";
                     while (sol.tokenizerStatus == Tokenizer::Status::CONTINUE &&
-                           (size = read(sol.process.out, buf, BUFSIZE)))
+                           (size = read(sol.process.out, buf, BUFSIZ)))
                     {
                         if (size < 0)
                         {
