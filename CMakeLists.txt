@@ -6,32 +6,16 @@ cmake_minimum_required(VERSION 2.8)
 
 include(YandexContestCommon)
 
-# BOOST
-set(Boost_USE_STATIC_LIBS OFF)
-set(Boost_USE_MULTITHREADED ON)
-find_package(Boost COMPONENTS system filesystem serialization unit_test_framework program_options REQUIRED)
-include_directories(${Boost_INCLUDE_DIRS})
-list(APPEND libraries ${Boost_LIBRARIES})
+bunsan_use_boost(system filesystem serialization unit_test_framework program_options)
 
-# LibEvent
-#find_package(PkgConfig)
-#pkg_check_modules(REQUIRED libevent)
-#link_directories(${LibEvent_LIBRARY_DIRS})
-#include_directories(${LibEvent_INCLUDE_DIRS})
-#list(APPEND libraries ${LibEvent_LIBRARIES})
-
-# yandex_contest_*
-list(APPEND libraries
+bunsan_use_bunsan(common)
+bunsan_use(
     yandex_contest_common
     yandex_contest_system
     yandex_contest_invoker
 )
 
-# Local
-include_directories(include)
-
-# Targets
-add_library(${PROJECT_NAME} SHARED
+bunsan_add_shared_library(${PROJECT_NAME}
     src/lib/Killer.cpp
     src/lib/KillerImpl.cpp
     src/lib/KillerInterface.cpp
@@ -48,7 +32,6 @@ add_library(${PROJECT_NAME} SHARED
 
     src/lib/Configurator.cpp
 )
-target_link_libraries(${PROJECT_NAME} ${libraries})
 
 set(tokenizers)
 
@@ -58,16 +41,11 @@ macro(add_tokenizer target src)
 endmacro()
 
 add_tokenizer(${PROJECT_NAME}_tokenizer_split_char src/tokenizers/split_char.c)
-
 add_tokenizer(${PROJECT_NAME}_tokenizer_split src/tokenizers/split.c)
 
-add_binary_targets(bin_targets killer broker)
+yandex_contest_add_binary_targets(bin_targets killer broker)
 
-# Installation
-install(DIRECTORY include DESTINATION .)
-install(TARGETS ${PROJECT_NAME} ${bin_targets} ${tokenizers}
-    RUNTIME DESTINATION bin
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib)
+bunsan_install_headers()
+bunsan_install_targets(${PROJECT_NAME} ${bin_targets} ${tokenizers})
 
-yandex_contest_tests()
+bunsan_include_tests()
