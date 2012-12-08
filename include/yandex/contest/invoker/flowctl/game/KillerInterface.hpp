@@ -3,7 +3,7 @@
 #include "yandex/contest/invoker/flowctl/game/Killer.hpp"
 #include "yandex/contest/invoker/flowctl/game/Error.hpp"
 
-#include "yandex/contest/StreamEnum.hpp"
+#include "bunsan/stream_enum.hpp"
 
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/nvp.hpp>
@@ -22,7 +22,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
     protected:
         struct Command
         {
-            YANDEX_CONTEST_INCLASS_STREAM_ENUM(Type,
+            BUNSAN_INCLASS_STREAM_ENUM(Type,
             (
                 FREEZE,
                 UNFREEZE,

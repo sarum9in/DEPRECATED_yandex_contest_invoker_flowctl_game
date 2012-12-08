@@ -2,7 +2,7 @@
 
 #include "yandex/contest/invoker/flowctl/game/Broker.hpp"
 
-#include "yandex/contest/StreamEnum.hpp"
+#include "bunsan/stream_enum.hpp"
 
 #include <vector>
 #include <string>
@@ -38,7 +38,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
     protected:
         struct Command
         {
-            YANDEX_CONTEST_INCLASS_STREAM_ENUM(Type,
+            BUNSAN_INCLASS_STREAM_ENUM(Type,
             (
                 BEGIN,
                 SEND,

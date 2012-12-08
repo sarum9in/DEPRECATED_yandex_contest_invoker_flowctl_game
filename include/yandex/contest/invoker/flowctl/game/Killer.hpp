@@ -1,8 +1,8 @@
 #pragma once
 
-#include "yandex/contest/StreamEnum.hpp"
-
 #include "yandex/contest/invoker/Process.hpp"
+
+#include "bunsan/stream_enum.hpp"
 
 #include <string>
 
@@ -15,7 +15,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
     public:
         typedef Process::Id Id;
 
-        YANDEX_CONTEST_INCLASS_STREAM_ENUM_CLASS(Status,
+        BUNSAN_INCLASS_STREAM_ENUM_CLASS(Status,
         (
             OK,
             PROTECTED,

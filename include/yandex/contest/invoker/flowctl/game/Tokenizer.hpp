@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "yandex/contest/StreamEnum.hpp"
+#include "bunsan/stream_enum.hpp"
 
 #include <cstdlib>
 
@@ -17,7 +17,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
     class Tokenizer: private boost::noncopyable
     {
     public:
-        YANDEX_CONTEST_INCLASS_STREAM_ENUM_CLASS(Status,
+        BUNSAN_INCLASS_STREAM_ENUM_CLASS(Status,
         (
             FAIL,       ///< An error has occurred.
             CONTINUE,   ///< There is no enough symbols, need more.

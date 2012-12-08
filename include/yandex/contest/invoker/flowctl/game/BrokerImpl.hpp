@@ -5,6 +5,8 @@
 
 #include "yandex/contest/system/unistd/DynamicLoader.hpp"
 
+#include "bunsan/stream_enum.hpp"
+
 #include <vector>
 #include <string>
 #include <limits>
@@ -44,7 +46,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 
         struct Options
         {
-            YANDEX_CONTEST_INCLASS_STREAM_ENUM_CLASS(Protocol,
+            BUNSAN_INCLASS_STREAM_ENUM_CLASS(Protocol,
             (
                 TEXT
             ))

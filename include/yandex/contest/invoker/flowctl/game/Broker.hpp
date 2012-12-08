@@ -4,7 +4,7 @@
 #include "yandex/contest/invoker/flowctl/game/KillerInterface.hpp"
 #include "yandex/contest/invoker/flowctl/game/Tokenizer.hpp"
 
-#include "yandex/contest/StreamEnum.hpp"
+#include "bunsan/stream_enum.hpp"
 
 #include <vector>
 #include <string>
@@ -47,7 +47,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 
         struct Result
         {
-            YANDEX_CONTEST_INCLASS_STREAM_ENUM_CLASS(Status,
+            BUNSAN_INCLASS_STREAM_ENUM_CLASS(Status,
             (
                 OK,
                 TOKENIZER_ERROR,
