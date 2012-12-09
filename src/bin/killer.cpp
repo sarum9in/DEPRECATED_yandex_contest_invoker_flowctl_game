@@ -3,15 +3,14 @@
 
 #include "yandex/contest/detail/LogHelper.hpp"
 
-#include "yandex/contest/config/InputArchive.hpp"
-
 #include "yandex/contest/system/Trace.hpp"
+
+#include "bunsan/config/input_archive.hpp"
 
 #include <boost/assert.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
-namespace config = yandex::contest::config;
 using namespace yandex::contest::invoker::flowctl::game;
 
 KillerImpl::Options readOptions(const boost::filesystem::path &path)
@@ -19,7 +18,7 @@ KillerImpl::Options readOptions(const boost::filesystem::path &path)
     boost::property_tree::ptree ptree;
     boost::property_tree::read_json(path.c_str(), ptree);
     KillerImpl::Options options;
-    config::InputArchive<boost::property_tree::ptree>::loadFromPtree(options, ptree);
+    bunsan::config::input_archive<boost::property_tree::ptree>::load_from_ptree(options, ptree);
     return options;
 }
 

@@ -1,7 +1,7 @@
 #include "yandex/contest/invoker/flowctl/game/Configurator.hpp"
 #include "yandex/contest/invoker/flowctl/game/KillerImpl.hpp"
 
-#include "yandex/contest/config/OutputArchive.hpp"
+#include "bunsan/config/output_archive.hpp"
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
@@ -19,7 +19,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
                          const boost::filesystem::path &path)
         {
             boost::property_tree::ptree cfg;
-            config::OutputArchive<boost::property_tree::ptree>::saveToPtree(options, cfg);
+            bunsan::config::output_archive<boost::property_tree::ptree>::save_to_ptree(options, cfg);
             boost::property_tree::write_json(
                 container->filesystem().keepInRoot(path).string(), cfg);
             container->filesystem().setOwnerId(path, proc->ownerId());
