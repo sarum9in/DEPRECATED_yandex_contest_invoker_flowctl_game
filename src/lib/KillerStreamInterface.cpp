@@ -1,6 +1,6 @@
-#include "yandex/contest/invoker/flowctl/game/KillerStreamInterface.hpp"
+#include <yandex/contest/invoker/flowctl/game/KillerStreamInterface.hpp>
 
-#include "yandex/contest/SystemError.hpp"
+#include <yandex/contest/SystemError.hpp>
 
 #include <iostream>
 #include <type_traits>

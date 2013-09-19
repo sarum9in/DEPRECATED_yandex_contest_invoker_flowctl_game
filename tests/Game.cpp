@@ -1,13 +1,13 @@
 #define BOOST_TEST_MODULE Game
 #include <boost/test/unit_test.hpp>
 
-#include "yandex/contest/invoker/flowctl/game/Configurator.hpp"
-#include "yandex/contest/invoker/tests/ContainerFixture.hpp"
-#include "yandex/contest/system/unistd/access/Operations.hpp"
+#include <yandex/contest/invoker/flowctl/game/Configurator.hpp>
+#include <yandex/contest/invoker/tests/ContainerFixture.hpp>
+#include <yandex/contest/system/unistd/access/Operations.hpp>
 
-#include "bunsan/testing/environment.hpp"
-#include "bunsan/testing/exec_test.hpp"
-#include "bunsan/testing/filesystem/read_data.hpp"
+#include <bunsan/testing/environment.hpp>
+#include <bunsan/testing/exec_test.hpp>
+#include <bunsan/testing/filesystem/read_data.hpp>
 
 #include <boost/filesystem/operations.hpp>
 

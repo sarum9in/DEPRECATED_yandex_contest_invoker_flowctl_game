@@ -1,7 +1,7 @@
-#include "yandex/contest/invoker/flowctl/game/Configurator.hpp"
-#include "yandex/contest/invoker/flowctl/game/KillerImpl.hpp"
+#include <yandex/contest/invoker/flowctl/game/Configurator.hpp>
+#include <yandex/contest/invoker/flowctl/game/KillerImpl.hpp>
 
-#include "bunsan/config/output_archive.hpp"
+#include <bunsan/config/output_archive.hpp>
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>

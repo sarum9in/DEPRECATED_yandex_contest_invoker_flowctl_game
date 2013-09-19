@@ -1,8 +1,8 @@
 #pragma once
 
-#include "yandex/contest/invoker/Process.hpp"
+#include <yandex/contest/invoker/Process.hpp>
 
-#include "bunsan/stream_enum.hpp"
+#include <bunsan/stream_enum.hpp>
 
 #include <string>
 

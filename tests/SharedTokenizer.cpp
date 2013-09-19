@@ -1,7 +1,7 @@
 #define BOOST_TEST_MODULE SharedTokenizer
 #include <boost/test/unit_test.hpp>
 
-#include "yandex/contest/invoker/flowctl/game/SharedTokenizer.hpp"
+#include <yandex/contest/invoker/flowctl/game/SharedTokenizer.hpp>
 
 #include <dlfcn.h>
 

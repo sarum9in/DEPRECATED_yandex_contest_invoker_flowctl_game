@@ -1,12 +1,12 @@
-#include "yandex/contest/invoker/flowctl/game/BrokerImpl.hpp"
-#include "yandex/contest/invoker/flowctl/game/KillerStreamInterface.hpp"
-#include "yandex/contest/invoker/flowctl/game/SharedTokenizer.hpp"
+#include <yandex/contest/invoker/flowctl/game/BrokerImpl.hpp>
+#include <yandex/contest/invoker/flowctl/game/KillerStreamInterface.hpp>
+#include <yandex/contest/invoker/flowctl/game/SharedTokenizer.hpp>
 
-#include "yandex/contest/SystemError.hpp"
+#include <yandex/contest/SystemError.hpp>
 
-#include "yandex/contest/detail/LogHelper.hpp"
+#include <yandex/contest/detail/LogHelper.hpp>
 
-#include "yandex/contest/system/unistd/Operations.hpp"
+#include <yandex/contest/system/unistd/Operations.hpp>
 
 #include <boost/scope_exit.hpp>
 

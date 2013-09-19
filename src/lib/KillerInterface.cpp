@@ -1,6 +1,6 @@
-#include "yandex/contest/invoker/flowctl/game/KillerInterface.hpp"
+#include <yandex/contest/invoker/flowctl/game/KillerInterface.hpp>
 
-#include "yandex/contest/detail/LogHelper.hpp"
+#include <yandex/contest/detail/LogHelper.hpp>
 
 namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace game
 {

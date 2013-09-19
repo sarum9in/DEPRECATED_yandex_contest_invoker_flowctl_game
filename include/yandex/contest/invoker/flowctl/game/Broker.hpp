@@ -1,10 +1,10 @@
 #pragma once
 
-#include "yandex/contest/invoker/flowctl/game/Killer.hpp"
-#include "yandex/contest/invoker/flowctl/game/KillerInterface.hpp"
-#include "yandex/contest/invoker/flowctl/game/Tokenizer.hpp"
+#include <yandex/contest/invoker/flowctl/game/Killer.hpp>
+#include <yandex/contest/invoker/flowctl/game/KillerInterface.hpp>
+#include <yandex/contest/invoker/flowctl/game/Tokenizer.hpp>
 
-#include "bunsan/stream_enum.hpp"
+#include <bunsan/stream_enum.hpp>
 
 #include <vector>
 #include <string>

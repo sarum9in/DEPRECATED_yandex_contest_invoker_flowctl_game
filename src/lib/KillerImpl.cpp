@@ -1,10 +1,10 @@
-#include "yandex/contest/invoker/flowctl/game/KillerImpl.hpp"
+#include <yandex/contest/invoker/flowctl/game/KillerImpl.hpp>
 
-#include "yandex/contest/detail/LogHelper.hpp"
+#include <yandex/contest/detail/LogHelper.hpp>
 
-#include "yandex/contest/system/unistd/Operations.hpp"
+#include <yandex/contest/system/unistd/Operations.hpp>
 
-#include "yandex/contest/system/cgroup/Freezer.hpp"
+#include <yandex/contest/system/cgroup/Freezer.hpp>
 
 namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace game
 {

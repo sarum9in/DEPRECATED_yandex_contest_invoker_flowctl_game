@@ -1,4 +1,4 @@
-#include "yandex/contest/invoker/flowctl/game/SharedTokenizer.hpp"
+#include <yandex/contest/invoker/flowctl/game/SharedTokenizer.hpp>
 
 namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace game
 {

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "yandex/contest/invoker/flowctl/game/Killer.hpp"
+#include <yandex/contest/invoker/flowctl/game/Killer.hpp>
 
-#include "yandex/contest/system/cgroup/ControlGroup.hpp"
+#include <yandex/contest/system/cgroup/ControlGroup.hpp>
 
 #include <string>
 #include <unordered_set>
