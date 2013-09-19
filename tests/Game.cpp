@@ -1,23 +1,23 @@
 #define BOOST_TEST_MODULE Game
 #include <boost/test/unit_test.hpp>
 
-#include "yandex/contest/tests/BoostExecTest.hpp"
-#include "yandex/contest/tests/Environment.hpp"
-#include "yandex/contest/tests/Utils.hpp"
-
+#include "yandex/contest/invoker/flowctl/game/Configurator.hpp"
 #include "yandex/contest/invoker/tests/ContainerFixture.hpp"
-
 #include "yandex/contest/system/unistd/access/Operations.hpp"
 
-#include "yandex/contest/invoker/flowctl/game/Configurator.hpp"
-
-#include <functional>
+#include "bunsan/testing/environment.hpp"
+#include "bunsan/testing/exec_test.hpp"
+#include "bunsan/testing/filesystem/read_data.hpp"
 
 #include <boost/filesystem/operations.hpp>
+
+#include <functional>
 
 namespace ya = yandex::contest::invoker;
 namespace yag = ya::flowctl::game;
 namespace unistd = yandex::contest::system::unistd;
+
+using namespace bunsan::testing;
 
 struct GameFixture: ContainerFixture
 {
@@ -40,7 +40,7 @@ struct GameFixture: ContainerFixture
 
     void pushLibraries()
     {
-        push(testsResourcesSourceDir / "judge.py", {0, 0}, 0644);
+        push(dir::tests::resources::source() / "judge.py", {0, 0}, 0644);
     }
 
     boost::filesystem::path push(const boost::filesystem::path &path,
@@ -92,9 +92,9 @@ struct GameFixture: ContainerFixture
             BOOST_TEST_MESSAGE("Solution [" << i << "]:");
             checkSolution(i + 3);
         }
-        BOOST_TEST_MESSAGE("Broker: <<<\n" << readData(brokerLog) << "\n>>> Broker");
-        BOOST_TEST_MESSAGE("Killer: <<<\n" << readData(killerLog) << "\n>>> Killer");
-        BOOST_TEST_MESSAGE("Judge: <<<\n" << readData(judgeLog) << "\n>>> Judge");
+        BOOST_TEST_MESSAGE("Broker: <<<\n" << filesystem::read_data(brokerLog) << "\n>>> Broker");
+        BOOST_TEST_MESSAGE("Killer: <<<\n" << filesystem::read_data(killerLog) << "\n>>> Killer");
+        BOOST_TEST_MESSAGE("Judge: <<<\n" << filesystem::read_data(judgeLog) << "\n>>> Judge");
     }
 
     void runInfo()
@@ -117,13 +117,13 @@ BOOST_FIXTURE_TEST_SUITE(Game, GameFixture)
 
 BOOST_AUTO_TEST_CASE(empty)
 {
-    setJudge(testsResourcesSourceDir / "killer_judge.py");
+    setJudge(dir::tests::resources::source() / "killer_judge.py");
     runInfo();
 }
 
 BOOST_AUTO_TEST_CASE(kill_all)
 {
-    setJudge(testsResourcesSourceDir / "killer_judge.py");
+    setJudge(dir::tests::resources::source() / "killer_judge.py");
     addSolution(3, "sleep", "5");
     addSolution(4, "sleep", "5");
     addSolution(5, "sleep", "5");
@@ -132,36 +132,36 @@ BOOST_AUTO_TEST_CASE(kill_all)
 
 BOOST_AUTO_TEST_CASE(echo)
 {
-    setJudge(testsResourcesSourceDir / "echo_judge.py");
-    addSolutionCopy(3, testsResourcesSourceDir / "echo_solution.py");
+    setJudge(dir::tests::resources::source() / "echo_judge.py");
+    addSolutionCopy(3, dir::tests::resources::source() / "echo_solution.py");
     runInfo();
 }
 
 BOOST_AUTO_TEST_CASE(echo_ok)
 {
-    setJudge(testsResourcesSourceDir / "echo_ok_judge.py");
-    addSolutionCopy(3, testsResourcesSourceDir / "echo_solution.py");
+    setJudge(dir::tests::resources::source() / "echo_ok_judge.py");
+    addSolutionCopy(3, dir::tests::resources::source() / "echo_solution.py");
     runOK();
 }
 
 BOOST_AUTO_TEST_CASE(echo_loop)
 {
-    setJudge(testsResourcesSourceDir / "echo_loop_judge.py");
-    addSolutionCopy(3, testsResourcesSourceDir / "echo_loop_solution.py");
+    setJudge(dir::tests::resources::source() / "echo_loop_judge.py");
+    addSolutionCopy(3, dir::tests::resources::source() / "echo_loop_solution.py");
     runOK();
 }
 
 BOOST_AUTO_TEST_CASE(echo_no_reply_exit)
 {
-    setJudge(testsResourcesSourceDir / "echo_loop_no_reply_judge.py");
-    addSolutionCopy(3, testsResourcesSourceDir / "echo_loop_no_reply_solution.py");
+    setJudge(dir::tests::resources::source() / "echo_loop_no_reply_judge.py");
+    addSolutionCopy(3, dir::tests::resources::source() / "echo_loop_no_reply_solution.py");
     runOK();
 }
 
 BOOST_AUTO_TEST_CASE(echo_eof_after_terminate)
 {
-    setJudge(testsResourcesSourceDir / "echo_terminate_judge.py");
-    addSolutionCopy(3, testsResourcesSourceDir / "echo_loop_no_reply_solution.py");
+    setJudge(dir::tests::resources::source() / "echo_terminate_judge.py");
+    addSolutionCopy(3, dir::tests::resources::source() / "echo_loop_no_reply_solution.py");
     runOK();
 }
 
@@ -169,8 +169,8 @@ BOOST_AUTO_TEST_SUITE(resource_limits)
 
 BOOST_AUTO_TEST_CASE(real_time_limit)
 {
-    setJudge(testsResourcesSourceDir / "sleep_rtl_judge.py");
-    addSolutionCopy(3, testsResourcesSourceDir / "sleep_solution.py");
+    setJudge(dir::tests::resources::source() / "sleep_rtl_judge.py");
+    addSolutionCopy(3, dir::tests::resources::source() / "sleep_solution.py");
     runInfo();
 }
 
