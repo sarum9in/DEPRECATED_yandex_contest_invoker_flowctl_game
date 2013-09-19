@@ -1,6 +1,6 @@
+#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 
 #define TOKENIZER_FAIL -1
 #define TOKENIZER_CONTINUE 0

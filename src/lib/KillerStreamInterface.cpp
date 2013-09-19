@@ -2,7 +2,6 @@
 
 #include <yandex/contest/SystemError.hpp>
 
-#include <iostream>
 #include <type_traits>
 
 namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace game

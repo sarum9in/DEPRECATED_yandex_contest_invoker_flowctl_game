@@ -7,14 +7,14 @@
 
 #include <bunsan/stream_enum.hpp>
 
-#include <vector>
-#include <string>
+#include <boost/noncopyable.hpp>
+
 #include <limits>
 #include <memory>
+#include <string>
+#include <vector>
 
 #include <ext/stdio_filebuf.h>
-
-#include <boost/noncopyable.hpp>
 
 namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace game
 {

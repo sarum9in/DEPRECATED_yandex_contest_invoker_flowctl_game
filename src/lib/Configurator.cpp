@@ -1,12 +1,13 @@
 #include <yandex/contest/invoker/flowctl/game/Configurator.hpp>
+
 #include <yandex/contest/invoker/flowctl/game/KillerImpl.hpp>
 
 #include <bunsan/config/output_archive.hpp>
 
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace game
 {

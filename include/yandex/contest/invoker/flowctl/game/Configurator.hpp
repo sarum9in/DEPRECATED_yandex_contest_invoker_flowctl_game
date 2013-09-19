@@ -1,19 +1,19 @@
 #pragma once
 
-#include <yandex/contest/invoker/All.hpp>
-
 #include <yandex/contest/invoker/flowctl/game/BrokerImpl.hpp>
 #include <yandex/contest/invoker/flowctl/game/Tokenizer.hpp>
 
-#include <vector>
-#include <string>
-#include <limits>
-#include <memory>
+#include <yandex/contest/invoker/All.hpp>
 
+#include <boost/assert.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/nvp.hpp>
-#include <boost/noncopyable.hpp>
-#include <boost/assert.hpp>
+
+#include <limits>
+#include <memory>
+#include <string>
+#include <vector>
 
 namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace game
 {

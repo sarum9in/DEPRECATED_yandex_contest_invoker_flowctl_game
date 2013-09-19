@@ -2,7 +2,6 @@
 #include <yandex/contest/invoker/flowctl/game/KillerStreamInterface.hpp>
 
 #include <yandex/contest/detail/LogHelper.hpp>
-
 #include <yandex/contest/system/Trace.hpp>
 
 #include <bunsan/config/input_archive.hpp>

@@ -6,13 +6,13 @@
 
 #include <bunsan/stream_enum.hpp>
 
-#include <vector>
-#include <string>
+#include <boost/noncopyable.hpp>
+
 #include <chrono>
 #include <limits>
 #include <memory>
-
-#include <boost/noncopyable.hpp>
+#include <string>
+#include <vector>
 
 namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace game
 {

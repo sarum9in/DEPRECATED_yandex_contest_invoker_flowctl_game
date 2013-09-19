@@ -4,12 +4,12 @@
 
 #include <bunsan/stream_enum.hpp>
 
-#include <vector>
-#include <string>
-
+#include <boost/lexical_cast.hpp>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/nvp.hpp>
-#include <boost/lexical_cast.hpp>
+
+#include <string>
+#include <vector>
 
 namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace game
 {

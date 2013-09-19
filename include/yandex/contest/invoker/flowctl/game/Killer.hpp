@@ -4,9 +4,9 @@
 
 #include <bunsan/stream_enum.hpp>
 
-#include <string>
-
 #include <boost/noncopyable.hpp>
+
+#include <string>
 
 namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace game
 {

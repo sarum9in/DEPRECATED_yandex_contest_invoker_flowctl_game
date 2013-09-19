@@ -1,8 +1,9 @@
 #pragma once
 
-#include <iostream>
-
 #include <yandex/contest/invoker/flowctl/game/KillerInterface.hpp>
+
+#include <istream>
+#include <ostream>
 
 namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace game
 {

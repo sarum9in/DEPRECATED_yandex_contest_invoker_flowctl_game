@@ -1,7 +1,7 @@
 #pragma once
 
-#include <yandex/contest/invoker/flowctl/game/Killer.hpp>
 #include <yandex/contest/invoker/flowctl/game/Error.hpp>
+#include <yandex/contest/invoker/flowctl/game/Killer.hpp>
 
 #include <bunsan/stream_enum.hpp>
 
