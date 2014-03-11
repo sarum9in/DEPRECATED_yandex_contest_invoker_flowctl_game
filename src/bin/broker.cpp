@@ -4,7 +4,7 @@
 #include <yandex/contest/detail/LogHelper.hpp>
 #include <yandex/contest/system/Trace.hpp>
 
-#include <bunsan/config/input_archive.hpp>
+#include <bunsan/config/cast.hpp>
 
 #include <boost/assert.hpp>
 #include <boost/property_tree/json_parser.hpp>
@@ -16,9 +16,7 @@ yag::BrokerImpl::Options readOptions(const boost::filesystem::path &path)
 {
     boost::property_tree::ptree ptree;
     boost::property_tree::read_json(path.c_str(), ptree);
-    yag::BrokerImpl::Options options;
-    bunsan::config::input_archive<boost::property_tree::ptree>::load_from_ptree(options, ptree);
-    return options;
+    return bunsan::config::load<yag::BrokerImpl::Options>(ptree);
 }
 
 int main(int argc, char *argv[])
@@ -34,7 +32,9 @@ int main(int argc, char *argv[])
         switch (options.protocol)
         {
         case yag::BrokerImpl::Options::Protocol::TEXT:
-            iface.reset(new yag::BrokerTextInterface(ioIface.input, ioIface.output));
+            iface.reset(
+                new yag::BrokerTextInterface(ioIface.input, ioIface.output)
+            );
             break;
         default:
             std::cerr << "Unsupported protocol " << options.protocol << ".";
