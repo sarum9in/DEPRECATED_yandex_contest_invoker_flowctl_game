@@ -51,7 +51,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         ControlGroupId rawIdToCgroup(const Id &id) const;
 
     private:
-        system::cgroup::ControlGroup thisControlGroup_, parentControlGroup_;
+        system::cgroup::ControlGroupPointer thisControlGroup_, parentControlGroup_;
         std::unordered_set<ControlGroupId> unprotected_;
         boost::format pattern_;
     };

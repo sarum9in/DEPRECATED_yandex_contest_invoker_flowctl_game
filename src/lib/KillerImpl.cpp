@@ -3,18 +3,26 @@
 #include <yandex/contest/detail/LogHelper.hpp>
 
 #include <yandex/contest/system/cgroup/Freezer.hpp>
+#include <yandex/contest/system/cgroup/MultipleControlGroup.hpp>
+#include <yandex/contest/system/cgroup/SingleControlGroup.hpp>
+#include <yandex/contest/system/cgroup/Termination.hpp>
 #include <yandex/contest/system/unistd/Operations.hpp>
 
 namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace game
 {
     KillerImpl::KillerImpl(const Options &options):
-        thisControlGroup_(system::cgroup::ControlGroup::getControlGroup(system::unistd::getpid())),
-        parentControlGroup_(thisControlGroup_.parent()),
+        thisControlGroup_(system::cgroup::MultipleControlGroup::forSelf()),
+        parentControlGroup_(thisControlGroup_->parent()),
         pattern_(options.pattern)
     {
         for (const Id id: options.unprotected)
             unprotected_.insert(rawIdToCgroup(id));
-        unprotected_.erase(thisControlGroup_.name().string());
+        unprotected_.erase(
+            system::cgroup::SingleControlGroup::forSelf("freezer")->
+            controlGroup().
+            filename().
+            string()
+        );
     }
 
 #define YANDEX_FLOWCTL_KILLER(FUNCTION, ACT) \
@@ -29,7 +37,8 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
         } \
         try \
         { \
-            system::cgroup::ControlGroup cg(parentControlGroup_.attachChild(cid)); \
+            const system::cgroup::ControlGroupPointer cg = \
+                parentControlGroup_->attachChild(cid); \
             ACT; \
         } \
         catch (std::exception &e) \
@@ -45,7 +54,7 @@ namespace yandex{namespace contest{namespace invoker{namespace flowctl{namespace
 
     YANDEX_FLOWCTL_KILLER(unfreeze, system::cgroup::Freezer(cg).unfreeze())
 
-    YANDEX_FLOWCTL_KILLER(terminate, cg.terminate())
+    YANDEX_FLOWCTL_KILLER(terminate, system::cgroup::terminate(cg))
 
     KillerImpl::ControlGroupId KillerImpl::rawIdToCgroup(const Id &id) const
     {
